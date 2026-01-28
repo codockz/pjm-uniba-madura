@@ -9,7 +9,26 @@
 
   <!-- PLUGINS CSS STYLE -->
   @include('frontend_layouts.link_css')
+  <style>
+/* Kecilkan jarak antar menu */
+.navbar-nav > li > a {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 12px;       /* sedikit diperkecil */
+    white-space: nowrap;  /* cegah turun baris */
+}
 
+/* Supaya sejajar logo */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+/* Logo tidak terlalu makan tempat */
+.navbar-brand img {
+    max-width: 200px;
+}
+</style>
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>

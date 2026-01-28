@@ -48,4 +48,50 @@
         margin-bottom: 55px !important;
         /* justify-content: center; */
     }
+
+    </style>
+
+      <style>
+/* === LOGO === */
+.logo-uniba {
+    height: 55px;
+    width: auto;
+    margin-top: 5px;
+}
+
+/* === NAVBAR === */
+.navbar-nav > li > a {
+    padding: 18px 10px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* Supaya menu & logo sejajar */
+.navbar-header {
+    display: flex;
+    align-items: center;
+}
+
+/* Cegah menu turun ke bawah */
+.navbar-collapse {
+    display: flex !important;
+    justify-content: flex-end;
+}
+
+/* Hilangkan jarak berlebihan */
+.navbar {
+    min-height: 70px;
+}
+/* Geser logo ke kiri */
+.navbar-brand {
+    padding-left: 0 !important;
+    margin-left: -15px; /* bisa -10px atau -20px, sesuaikan */
+}
+/* Rapikan jarak menu agar seimbang */
+.navbar-nav > li > a {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+
 </style>
