@@ -56,7 +56,7 @@ class MediaController extends Controller
                         ->addIndexColumn()
                         ->make(true);
         }
-        return view('pages.media.index',compact('setting','title','data','kategori'));
+        return view('admin.media.index',compact('setting','title','data','kategori'));
     }
 
 

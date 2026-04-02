@@ -61,163 +61,317 @@
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </button>
-                                <a class="navbar-brand" href="{{ route('frontend.frontend') }}">
-                                    <img src="{{ asset('logo/logo_unibamadura.png') }}" class="logo clearfix"
-                                        alt="Uniba Madura" width="300" style="margin-top:10px;">
-                                    {{-- <a class="navbar-brand logo clearfix" href="#"><img src="{{ asset('logo/logo_unibamadura.png') }}" alt="Uniba Madura" class="img-responsive" /></a> --}}
-                                </a>
-
-                                    <ul class="nav navbar-nav navbar-right">
-                                        <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            Profil <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{ route('frontend.profile') }}">Profil PJM</a></li>
-                                            <li><a href="{{ route('frontend.visi-misi') }}">Visi Misi & Tujuan</a></li>
-                                            <li><a href="{{ route('frontend.struktur_organisasi') }}">Struktur
-                                                    Organisasi</a></li>
-                                            <li><a href="{{ route('frontend.personalia') }}">Personalia</a></li>
-                                        </ul>
-                                    </li>
-                                <li><a href="#">Layanan</a></li>
-                                        <li><a href="#">Akreditasi</a></li>
-                                        <li><a href="#">Dokumen Induk</a></li>
-                                        <li><a href="#">Dokumen Mutu</a></li>
-                                        <li><a href="#">Infogram</a></li>
-                                        <li><a href="#">Sistem Informasi Mutu</a></li>
-
-
-                            </div>
-
+                                <a href="/">
+                                    <a class="navbar-brand" href="/">
+                                        <img src="{{ asset('logo/logo_unibamadura.png') }}" class="logo"
+                                            alt="Uniba Madura">
+                                    </a>
+                                </a {{-- <a class="navbar-brand logo clearfix" href="#"><img src="{{ asset('logo/logo_unibamadura.png') }}" alt="Uniba Madura" class="img-responsive" /></a> --}} </div>
                                 <!-- Collect the nav links, forms, and other content for toggling -->
-                                {{-- <div class="collapse navbar-collapse" id="main-nav">
-                                <ul class="nav navbar-nav navbar-right">
-
-
-
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            Profil <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{ route('frontend.profile') }}">Profil PJM</a></li>
-                                            <li><a href="{{ route('frontend.visi-misi') }}">Visi Misi & Tujuan</a></li>
-                                            <li><a href="{{ route('frontend.struktur_organisasi') }}">Struktur
-                                                    Organisasi</a></li>
-                                            <li><a href="{{ route('frontend.personalia') }}">Personalia</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li><a href="#">Layanan</a></li>
-                                    <li><a href="#">Akreditasi</a></li>
-                                    <li><a href="#">Dokumen Induk</a></li>
-                                    <li><a href="#">Dokumen Mutu</a></li>
-                                    <li><a href="#">Infografis</a></li>
-
-                                    <li>
-                                        <a href="{{ route('frontend.sim') }}">Sistem Informasi Mutu</a>
-                                    </li>
-                                </ul>
-
-
-                                </li>
-                                <li class=" dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                        aria-haspopup="true" aria-expanded="false">Profil</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown">
+                                <div class="collapse navbar-collapse" id="main-nav">
+                                    <ul class="nav navbar-nav navbar-right">
+                                        <li class="active" style="color: #006634 !important;">
+                                            <a href="/" role="button"
+                                                style="color: #006634 !important;">Beranda</a>
+                                        </li>
+                                        <li class=" dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                                                role="button" aria-haspopup="true" aria-expanded="false">PJM</a>
+                                                role="button" aria-haspopup="true" aria-expanded="false">Profil</a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="{{ route('frontend.profile') }}">Profil</a></li>
-                                                <li><a href="{{ route('frontend.visi-misi') }}">Visi,Misi dan Tujuan</a>
-                                                </li>
-                                                <li><a href="{{ route('frontend.struktur_organisasi') }}">Struktur
+                                                <li><a href="/profile/profile-pjm">Profil PJM</a></li>
+                                                <li><a href="/profile/visi-dan-misi">Visi Dan Misi </a>
+                                                    {{-- <li><a href="{{ route('frontend.tugas-fungsi') }}">Tugas Dan Fungsi </a> --}}
+                                                <li><a href="/profile/struktur-organisasi">Struktur
                                                         Organisasi</a></li>
-                                                <li><a href="{{ route('frontend.personalia') }}">Personalia</a></li>
-                                                <li><a href="{{ route('frontend.tupoksi_pjm') }}">Tupoksi PJM Uniba</a>
+                                                {{-- <li><a href="{{ route('frontend.personalia') }}">Personalia</a></li> --}}
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                Layanan <span class=""></span>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-layanan">
+
+                                                <!-- Pusat Pengembangan Standar Mutu -->
+                                                <li class="dropdown-submenu">
+                                                    <a href="#">Pusat Pengembangan Standar Mutu</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="{{ route('frontend.daftar_asesor_bkd') }}">Daftar
+                                                                Asesor BKD</a>
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.siklus_spmi') }}">Siklus
+                                                                SPMI</a></li>
+                                                        <li><a href="{{ route('frontend.kpm_gpm') }}">KPM & GPM</a></li>
+                                                        <li><a href="{{ route('frontend.surat_tugas_monev') }}">Surat
+                                                                Tugas Monev</a>
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.laporan_monev') }}">Laporan
+                                                                Monev</a></li>
+                                                        {{-- DALAM BENTUK TABEL SAJA --}}
+                                                    </ul>
+                                                </li>
+
+                                                <!-- Pusat Audit dan Pengendalian Mutu -->
+                                                <li class="dropdown-submenu">
+                                                    <a href="#">Pusat Audit dan Pengendalian Mutu</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class="dropdown">
+                                                            <a href="#">Laporan Hasil Survei</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_hasil_survei', 2022) }}">
+                                                                        Tahun 2022</a></li>
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_hasil_survei', 2023) }}">
+                                                                        Tahun 2023</a></li>
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_hasil_survei', 2024) }}">
+                                                                        Tahun 2024</a></li>
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_hasil_survei', 2025) }}">
+                                                                        Tahun 2025</a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="dropdown">
+                                                            <a href="#">Laporan AMI</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_ami', 2021) }}">Tahun
+                                                                        2021</a></li>
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_ami', 2022) }}">Tahun
+                                                                        2022</a></li>
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_ami', 2023) }}">Tahun
+                                                                        2023</a></li>
+                                                                <li><a
+                                                                        href="{{ route('frontend.laporan_ami', 2024) }}">Tahun
+                                                                        2024</a></li>
+                                                            </ul>
+                                                        </li>
+                                                        {{-- DALAM BENTUK TABEL SAJA --}}
+                                                        <li><a href="{{ route('frontend.jadwal_rtm') }}">Jadwal RTM</a>
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.jadwal_ami') }}">Jadwal AMI</a>
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.daftar_auditor_internal') }}">Daftar
+                                                                Auditor
+                                                                Internal</a></li>
+                                                        <li class="dropdown">
+                                                            <a href="#">Kalender Mutu</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a href="{{ url('/kalender-mutu/2022') }}">
+                                                                        Tahun 2022
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="{{ url('/kalender-mutu/2023') }}">
+                                                                        Tahun 2023
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="{{ url('/kalender-mutu/2024') }}">
+                                                                        Tahun 2024
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="{{ url('/kalender-mutu/2025') }}">
+                                                                        Tahun 2025
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+
+                                                        <li class="dropdown">
+                                                            <a href="#">Kalender Akademik</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a href="{{ route('frontend.survei_pemangku') }}">
+                                                                        Survei Untuk Pemangku Kepentingan
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a
+                                                                        href="{{ route('frontend.kalender_akademik', 2022) }}">
+                                                                        Tahun 2022
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a
+                                                                        href="{{ route('frontend.kalender_akademik', 2023) }}">
+                                                                        Tahun 2023
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a
+                                                                        href="{{ route('frontend.kalender_akademik', 2024) }}">
+                                                                        Tahun 2024
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.sertifikasi_dosen') }}">Sertifikasi
+                                                                Dosen</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+
+                                                <!-- Tracer Study -->
+                                                <li class="dropdown-submenu">
+                                                    <a href="#">Tracer Study</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">Laporan Tracer Study 2022</a></li>
+                                                    </ul>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown akreditasi-menu">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                Akreditasi <span class=""></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{ route('frontend.akreditasi_institusi') }}">
+                                                        Akreditasi Institusi</a></li>
+                                                <li><a href="{{ route('frontend.akreditasi_program_studi') }}">SK &
+                                                        Sertifikat
+                                                        <br> Akreditasi Program Studi</a></li>
+                                                <li class="dropdown-submenu">
+                                                    <a class="dropdown-item dropdown-toggle" href="#">
+                                                        Mekanisme Pengajuan Akreditasi
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item" href="https://www.banpt.or.id"
+                                                                target="_blank">
+                                                                BAN-PT
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="https://lamemba.or.id"
+                                                                target="_blank">
+                                                                LAMEMBA
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="https://lamdik.or.id"
+                                                                target="_blank">
+                                                                LAMDIK
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown-submenu">
+                                                    <a href="#">Instrumen Akreditasi
+                                                        <span class="submenu-arrow"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                                href="https://www.banpt.or.id/akreditasi/instrumen-akreditasi/"
+                                                                target="_blank">
+                                                                Instrumen 9 Kriteria
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="https://www.banpt.or.id/"
+                                                                target="_blank">
+                                                                LED & LKPS
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </li>
                                             </ul>
                                         </li>
-                                        @php
-                                            use App\Models\KategoriDivisi;
-                                            use App\Models\SubKategoriDivisi;
-                                            $kategori_divisi = KategoriDivisi::all();
 
-                                            $sub_kategori_divisi = SubKategoriDivisi::all();
-                                        @endphp
-                                        @foreach ($kategori_divisi as $div)
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                                                    role="button" aria-haspopup="true"
-                                                    aria-expanded="false">{{ $div->nama_kategori }}</a>
-                                                <ul class="dropdown-menu">
-                                                    @forelse ($sub_kategori_divisi->where('kategori_divisi_id', $div->id) as $sub)
+                                        <li class="dropdown akreditasi-menu">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dokumen
+                                                LPM <span class=""></span></a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown-submenu">
+                                                    <a href="#">Dokumen Induk
+                                                        <span class="submenu-arrow"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="{{ route('frontend.regulasi') }}">Regulasi</a>
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.kebijakan_rektor') }}">Produk
+                                                                Kebijakan <br> Rektor</a></li>
                                                         <li><a
-                                                                href="{{ route('frontend.divisi', $sub->sub_kategori_divisi) }}">{{ $sub->sub_kategori_divisi }}</a>
-                                                        </li>
-                                                    @empty
-                                                        <li style="font-size: 9px;">Tidak ada sub kategori Divisi </li>
-                                                    @endforelse
-                                                </ul>
-                                            </li>
-                                    </ul>
-                                </li>
-                                @endforeach
-                                <li class=" dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                        aria-haspopup="true" aria-expanded="false">Dokumen</a>
-                                    <ul class="dropdown-menu">
-                                        @php
-                                            use App\Models\KategoriDokumen;
-                                            use App\Models\SubKategoriDokumen;
-                                            $kategori = KategoriDokumen::all();
-                                            $sub_kategori = SubKategoriDokumen::all();
-                                        @endphp
-                                        @foreach ($kategori as $kat)
-                                            <li class="dropdown">
-                                                <a href="#"
-                                                    class="dropdown-toggle subcategory-link">{{ $kat->nama_kategori }}</a>
-                                                <ul class="dropdown-menu">
-                                                    @forelse ($sub_kategori->where('kategori_dokumen_id', $kat->id) as $sub)
-                                                        <li><a href="{{ route('frontend.dokumen', $sub->sub_kategori_dokumen) }}"
-                                                                class="subcategory-link">{{ $sub->sub_kategori_dokumen }}</a>
-                                                        </li>
-                                                    @empty
-                                                        <li style="font-size: 9px;">Tidak ada sub kategori dokumen
-                                                        </li>
-                                                    @endforelse
-                                                </ul>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                <li class=" dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                        aria-haspopup="true" aria-expanded="false">SPMI dan AMI</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="javascript::void(0);">Workshop SPMI</a></li>
-                                        <li><a href="javascript::void(0);">Workshop AMI</a></li>
-                                    </ul>
-                                </li>
-                                <li class=" dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                        aria-haspopup="true" aria-expanded="false">Media</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ route('frontend.pengumuman') }}">Pengumuman</a></li>
-                                        <li><a href="{{ route('frontend.berita') }}">Berita</a></li>
-                                        <li><a href="{{ route('frontend.agenda') }}">Agenda</a></li>
-                                        <li><a href="{{ route('frontend.foto') }}">Foto</a></li>
-                                    </ul>
-                                </li>
+                                                                href="{{ route('frontend.rencana_induk_pengembangan') }}">Rencana
+                                                                Induk <br> Pengembangan</a></li>
+                                                        <li><a href="{{ route('frontend.rencana_strategis') }}">Rencana
+                                                                Strategis Uniba Madura <br>
+                                                                Universitas Bahaudin
+                                                                Mudhary</a></li>
+                                                        <li><a
+                                                                href="{{ route('frontend.rencana_strategis_lembaga') }}">Rencana
+                                                                Strategis <br>Lembaga Penjaminan
+                                                                Mutu <br>Uniba Madura</a></li>
+                                                        <li><a href="{{ route('frontend.rencana_operasional') }}">Rencana
+                                                                Operasional</a></li>
+                                                        <li><a href="{{ route('frontend.statua_ortaker') }}">Statuta &
+                                                                Ortaker</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown-submenu">
+                                                    <a href="#">Dokumen Mutu<span
+                                                            class="submenu-arrow"></span></a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="{{ route('frontend.dokumen_spmi') }}">Dokumen
+                                                                SPMI</a></li>
+                                                        <li><a href="{{ route('frontend.pedoman') }}">Pedoman</a></li>
+                                                        <li><a href="{{ route('frontend.standar') }}">Standar</a></li>
+                                                        <li><a href="{{ route('frontend.sop') }}">SOP</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
 
-                                </div><!-- navbar-collapse --> --}}
+                                        <li class="dropdown infogram-dropdown">
+                                            <a href="#" class="dropdown-toggle"
+                                                data-toggle="dropdown">Statistik <span class=""></span></a>
+                                            <ul class="dropdown-menu infogram-menu">
+                                                <li>
+                                                    <a href="{{ route('statistik.dosen') }}">
+                                                        Data Dosen
 
+                                                    </a>
+                                                </li>
+                                                <li><a href="{{ route('statistik.mahasiswa') }}">Data Mahasiswa</a>
+                                                </li>
+                                                <li><a href="#">Data Alumni (Tracer Study)</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown sim-dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                Sistem Informasi Mutu <span class=""></span>
+                                            </a>
+                                            <ul class="dropdown-menu sim-menu">
+                                                <li><a href="https://sister.kemdiktisaintek.go.id/beranda"
+                                                        target="_blank">SISTER</a></li>
+                                                <li><a href="#">SIAMI</a></li>
+                                                <li><a href="#">SIMONA</a></li>
+                                                <li><a href="#">e-Complaint</a></li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </div><!-- navbar-collapse -->
+
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div><!-- /.container -->
+                </div><!-- /.container -->
         </nav><!-- navbar -->
     </div>
 </header>

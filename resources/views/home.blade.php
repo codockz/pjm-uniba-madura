@@ -3,6 +3,10 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
+            <div class="mb-3">
+                <h4>Halo, {{ Auth::user()->name }} 👋</h4>
+                <small>Selamat datang di Dashboard</small>
+            </div>
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 <div class="col-lg-3 col-6">
@@ -39,8 +43,7 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>44</h3>
-
+                            <h3>{{ $jumlahUser }}</h3>
                             <p>User Registrations</p>
                         </div>
                         <div class="icon">

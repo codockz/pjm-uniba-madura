@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @if (!empty($setting))
-        <title id="nama_web">{{ $setting->nama_web }}</title>
+        <title>{{ $title ?? 'Admin Panel' }}</title>
     @else
         <title>Pusat Jaminan Mutu | Uniba Madura</title>
     @endif
@@ -34,7 +34,6 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.min.css') }}">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <link rel="stylesheet"
         href="https://adminlte.io/themes/v3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -43,6 +42,7 @@
     <link rel="stylesheet"
         href="https://adminlte.io/themes/v3/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     @if (!empty($setting))
         <link rel="icon" type="image/x-icon" href="{{ asset('logo') }}/{{ $setting->logo_web }}" id="myIconLink">
     @else
@@ -75,7 +75,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">{{ $title }}</h1>
+                            {{-- <h1 class="m-0">{{ $title }}</h1> --}}
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -85,7 +85,6 @@
                 </div><!-- /.container-fluid -->
             </div>
             <!-- /.content-header -->
-
             <!-- Main content -->
             @yield('content')
             <!-- /.content -->
@@ -122,7 +121,9 @@
     <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!-- overlayScrollbars -->
     <script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    {{-- pop up --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- // search engine// --}}
 
     <!-- AdminLTE App -->
     <script src="{{ asset('assets/dist/js/adminlte.js') }}"></script>
@@ -158,6 +159,259 @@
             });
         });
     </script>
+    @if (session('success'))
+        <script>
+            toastr.success("{{ session('success') }}", "Berhasil", {
+                positionClass: "toast-top-right",
+                timeOut: 3000,
+                closeButton: true,
+                progressBar: true
+            });
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            toastr.error("{{ session('error') }}", "Gagal", {
+                positionClass: "toast-top-right",
+                timeOut: 3000,
+                closeButton: true,
+                progressBar: true
+            });
+        </script>
+    @endif
+
+    <style>
+        .card {
+            border-radius: 18px;
+        }
+
+        .btn {
+            border-radius: 12px;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+            transition: 0.2s;
+        }
+
+        .card {
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn {
+            transition: 0.2s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* FIX AREA PUTIH DROPDOWN */
+        .navbar-nav .nav-item {
+            width: auto !important;
+        }
+
+        .navbar-nav .nav-link {
+            display: inline-block !important;
+            width: auto !important;
+            padding: 5px 10px !important;
+        }
+
+        .small-box {
+            border-radius: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .small-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .small-box .icon {
+            opacity: 0.25;
+        }
+
+        .content-wrapper {
+            padding-top: 10px;
+        }
+    </style>
+    <script>
+        function loadData(url = null) {
+
+            let form = document.getElementById('filterForm');
+            let formData = new URLSearchParams(new FormData(form));
+
+            if (!url) {
+                url = "{{ route('admin.daftar_asesor_bkd.index') }}";
+            }
+
+            let finalUrl = new URL(url, window.location.origin);
+
+            formData.forEach((value, key) => {
+                finalUrl.searchParams.set(key, value);
+            });
+
+            fetch(finalUrl, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('tableData').innerHTML = data;
+                });
+        }
+
+        // Auto filter select
+        document.querySelectorAll('#filterForm select').forEach(el => {
+            el.addEventListener('change', function() {
+                loadData();
+            });
+        });
+
+        // Search delay
+        let typingTimer;
+        const searchInput = document.querySelector('input[name="search"]');
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(() => {
+                    loadData();
+                }, 500);
+            });
+        }
+
+        // Pagination AJAX
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.pagination a')) {
+                e.preventDefault();
+                let url = e.target.closest('a').getAttribute('href');
+                loadData(url);
+            }
+        });
+    </script>
+    <style>
+        .custom-select-clean {
+            height: 45px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .custom-select-clean:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, .25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+    </style>
+    <style>
+        .form-group-modern label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #495057;
+        }
+
+        .form-control-modern {
+            height: 45px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .form-control-modern:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, .25);
+        }
+
+        .card {
+            border-radius: 12px;
+        }
+    </style>
+    <style>
+        .input-error {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, .25);
+        }
+
+        .error-text {
+            font-size: 13px;
+            color: #dc3545;
+            margin-top: 5px;
+        }
+    </style>
+    <script>
+        /* GLOBAL DATATABLE ADMIN */
+        function initDataTable(selector) {
+
+            $(selector).DataTable({
+
+                responsive: true,
+                autoWidth: false,
+                pageLength: 10,
+                ordering: false,
+
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    paginate: {
+                        previous: "Sebelumnya",
+                        next: "Selanjutnya"
+                    }
+                }
+
+            });
+
+        }
+
+        $(document).ready(function() {
+
+            $(".datatable").each(function() {
+
+                let tableId = "#" + $(this).attr("id");
+
+                initDataTable(tableId);
+
+            });
+        });
+    </script>
+    @stack('scripts')
+    <style>
+        .table td {
+            vertical-align: middle;
+        }
+
+        /* Kolom panjang */
+        .tentang-col {
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Kolom aksi */
+        .col-aksi {
+            width: 120px;
+            white-space: nowrap;
+        }
+
+        /* Kolom file */
+        .col-file {
+            width: 120px;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #eef4ff;
+            transition: 0.2s;
+        }
+    </style>
 </body>
 
 </html>

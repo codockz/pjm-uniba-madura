@@ -82,90 +82,426 @@
                         </li>
                     </ul>
                 </li>
-
-
-                <li class="nav-header">PJM UNIBA</li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.program-studi.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-layer-group"></i>
+                        <p>Program Studi</p>
+                    </a>
+                </li>
+                <li class="nav-header">Fitur</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
-                            Selayang Pandang
+                            Profil
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview" style="display: none;">
+                    <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('profile.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Profile</p>
+                                <p>Profil PJM</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('visi_misi_tujuan.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Visi,Misi dan Tujuan PJM </p>
+                                <p>Visi, Misi & Tujuan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('struktur_organisasi.index') }}" class="nav-link">
+                            <a href="/admin_struktur_organisasi" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Struktur Organisasi</p>
                             </a>
                         </li>
+                    </ul>
+                </li>
+                {{-- ================== LAYANAN ================== --}}
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            Layanan
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-university"></i>
+                                <p>
+                                    Pusat Pengembangan Standar Mutu
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.daftar_asesor_bkd.index') }}"class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Daftar Asesor BKD</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.siklus-spmi.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Siklus SPMI</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('kpm_gpm.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>KPM & GPM</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('surat_tugas_monev.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Surat Tugas Monev</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('laporan_monev.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Laporan Monev</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-clipboard-check"></i>
+                                <p>
+                                    Pusat Audit & Pengendalian Mutu
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('laporan_hasil_survei.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Laporan Hasil Survei</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('laporan_ami.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Laporan AMI</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('jadwal_rtm.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Jadwal RTM</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('jadwal_ami.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Jadwal AMI</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('auditor_internal.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Daftar Auditor Internal</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('kalender_mutu.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Kalender Mutu</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.kalender_akademik.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Kalender Akademik</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('survei_pemangku.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Survei Pemangku Kepentingan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('sertifikasi_dosen.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sertifikasi Dosen</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user-graduate"></i>
+                                <p>
+                                    Tracer Study
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Laporan Tracer Study 2022</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                {{-- ================ AKHIR LAYANAN ================ --}}
+                {{-- ================== AKREDITASI ================== --}}
+                <li class="nav-item has-treeview">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-certificate"></i>
+                        <p>
+                            Akreditasi
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+
+                        {{-- Akreditasi Institusi --}}
                         <li class="nav-item">
-                            <a href="{{ route('personalia.index') }}" class="nav-link">
+                            <a href="{{ route('admin.akreditasi_institusi.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Personalia</p>
+                                <p>Akreditasi Institusi</p>
                             </a>
                         </li>
+                        {{-- SK & Sertifikat --}}
                         <li class="nav-item">
-                            <a href="{{ route('tupoksi_pjm.index') }}" class="nav-link">
+                            <a href="{{ route('admin.sk_akreditasi_prodi.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Tupoksi PJM Uniba</p>
+                                <p>SK & Sertifikat Akreditasi Program Studi</p>
+                            </a>
+                        </li>
+                        {{-- Mekanisme --}}
+                        {{-- <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-route"></i>
+                                <p>
+                                    Mekanisme Pengajuan Akreditasi
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Syarat Pengajuan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Alur Pengajuan</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
+                        {{-- Instrumen Akreditasi --}}
+                        {{-- <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-clipboard-list nav-icon"></i>
+                                <p>
+                                    Instrumen Akreditasi
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Instrumen 9 Kriteria</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>LED & LKPS</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
+                    </ul>
+                </li>
+                {{-- ================ END AKREDITASI ================ --}}
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-folder"></i>
+                        <p>
+                            Dokumen LPM
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {{-- ================= DOKUMEN INDUK ================= --}}
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-folder-open"></i>
+                                <p>
+                                    Dokumen Induk
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.regulasi.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Regulasi</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.kebijakan_rektor.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Produk Kebijakan Rektor</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.rencana_induk_pengembangan.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Rencana Induk Pengembangan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.rencana_strategis.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Rencana Strategis PJM Universitas Bahaudin Mudhari</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.rencana_strategis_lembaga.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Rencana Strategis PJM Uniba Madura</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.rencana_operasional.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Rencana Operasional</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.statua_ortakers.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Statuta & Ortaker</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {{-- ================= DOKUMEN MUTU ================= --}}
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>
+                                    Dokumen Mutu
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.dokumen_spmi.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Dokumen SPMI</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.pedoman.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pedoman</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.standar.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Standar</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.sop.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>SOP</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                {{-- ================== STATISTIK ================== --}}
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-bar"></i>
+                        <p>
+                            Statistik Dosen
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Dosen</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="javascript:void(0)" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Roadmap Penjaminan Mutu UNIBA</p>
+                                <p>Data Mahasiswa</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Alumni (Tracer Study)</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                {{-- ================ END STATISTIK ================ --}}
+                {{-- ================== SISTEM INFORMASI MUTU ================== --}}
+                <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
+                        <i class="nav-icon fas fa-network-wired"></i>
                         <p>
-                            Divisi
+                            Sistem Informasi Mutu
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview" style="display: none;">
+                    <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('divisi.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Divisi</p>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user-tie"></i>
+                                <p>SISTER</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-clipboard-check"></i>
+                                <p>SIAMI</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-database"></i>
+                                <p>SIMONA</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-comments"></i>
+                                <p>E-Complaint</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Dokumen
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview" style="display: none;">
-                        <li class="nav-item">
-                            <a href="{{ route('dokumen.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Dokumen</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                {{-- ================ END SISTEM INFORMASI MUTU ================ --}}
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-images"></i>
@@ -183,9 +519,9 @@
                         </li>
                     </ul>
                 </li>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>

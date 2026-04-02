@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SettingWebProfile;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -26,6 +27,11 @@ class HomeController extends Controller
     {
         $setting = SettingWebProfile::first();
         $title = 'Home';
-        return view('home',compact('title','setting'));
+        $jumlahUser = User::count();
+
+
+        return view('home', compact('title', 'setting', 'jumlahUser'));
+
     }
+
 }

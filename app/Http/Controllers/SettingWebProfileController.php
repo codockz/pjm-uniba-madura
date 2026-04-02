@@ -17,7 +17,7 @@ class SettingWebProfileController extends Controller
         $setting = SettingWebProfile::latest()->first();
         $title  = 'Setting Web';
 
-        return view('pages.setting_web.index',compact('setting','title'));
+        return view('admin.setting_web.index',compact('setting','title'));
     }
 
     /**

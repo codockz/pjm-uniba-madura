@@ -23,7 +23,7 @@ class SettingHalamanUtamaController extends Controller
         $data = SettingHalamanUtama::all();
         $setting_footer = ContentFooter::first();
         $about = About::first();
-        
+
         if (request()->ajax())
           {
                 return datatables()->of($data)
@@ -52,7 +52,7 @@ class SettingHalamanUtamaController extends Controller
                         ->addIndexColumn()
                         ->make(true);
         }
-        return view('pages.setting_halaman_utama.index',compact('setting','title','data','setting_footer','about'));
+        return view('admin.setting_halaman_utama.index',compact('setting','title','data','setting_footer','about'));
     }
 
     /**
@@ -183,14 +183,14 @@ class SettingHalamanUtamaController extends Controller
         }
     }
 
-   
+
     public function AboutStore(Request $request)
-    {   
+    {
         if(is_null($request->about_id)){
             $validate = Validator::make($request->all(),[
                 'link_video' => 'required',
                 'isi' => 'required',
-        
+
             ],[
                 'link_video.required' => 'Link Video Youtube harus di isi !',
                 'isi.required' => 'Isi harus di isi !',
@@ -205,7 +205,7 @@ class SettingHalamanUtamaController extends Controller
                 $about = About::create([
                     'isi' => $request->isi,
                     'link_video' => $request->link_video,
-    
+
                 ]);
                 return response()->json([
                     'status' => 200,
@@ -222,10 +222,10 @@ class SettingHalamanUtamaController extends Controller
                 'status' => 200,
                 'message' => 'data berhasil di update',
             ]);
-        }   
-        
+        }
 
-        
+
+
     }
 
     /**

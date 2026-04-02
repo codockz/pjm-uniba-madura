@@ -14,3 +14,6 @@
 <script src="{{ asset('frontend_asset/plugins/timer/jquery.syotimer.js') }}"></script>
 <script src="{{ asset('frontend_asset/plugins/smoothscroll/SmoothScroll.js') }}"></script>
 <script src="{{ asset('frontend_asset/js/custom.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap.min.js"></script>

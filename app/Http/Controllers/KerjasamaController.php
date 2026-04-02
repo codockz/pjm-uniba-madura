@@ -43,10 +43,10 @@ class KerjasamaController extends Controller
                     ->addIndexColumn()
                     ->make(true);
         }
-        return view('pages.kerjasama.index',compact('setting','title','data'));
+        return view('admin.kerjasama.index',compact('setting','title','data'));
     }
 
-   
+
     public function getData(Request $request)
     {
         $data = Kerjasama::findOrFail($request->data);
@@ -101,11 +101,11 @@ class KerjasamaController extends Controller
                 'gambar' => $gambar,
 
             ]);
-        
+
             return response()->json([
                 'status' => 200,
                 'message' => 'data berhasil di tambah',
-                
+
             ]);
         }
     }
@@ -199,18 +199,18 @@ class KerjasamaController extends Controller
     public function delete(Request $request)
     {
             $data = Kerjasama::findOrFail($request->ids);
-    
+
             $data->delete();
             $path = public_path('gambar_media/').$data->gambar;
             if($path){
                 unlink($path);
             }
-       
+
             return response()->json([
                 'status' => 200,
                 'message' => 'data berhasil di hapus',
                 'data' =>  $isi,
             ]);
-      
+
     }
 }
