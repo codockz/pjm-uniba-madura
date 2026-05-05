@@ -80,14 +80,64 @@
                                 <p>Kerjasama</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('slider.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Slide halaman Beranda</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-images"></i>
+                        <p>
+                            Media
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <a href="{{ route('media.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Media</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-layer-group"></i>
+                        <p>
+                            Sidebar
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="{{ route('sidebar-category.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sidebar</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('sidebar-item.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Item Sidebar</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.program-studi.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-layer-group"></i>
                         <p>Program Studi</p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-header">Fitur</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -111,7 +161,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin_struktur_organisasi" class="nav-link">
+                            <a href="{{ route('admin_struktur_organisasi.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Struktur Organisasi</p>
                             </a>
@@ -150,19 +200,19 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('kpm_gpm.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.kpm_gpm.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>KPM & GPM</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('surat_tugas_monev.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.surat_tugas_monev.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Surat Tugas Monev</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('laporan_monev.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.laporan_monev.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Laporan Monev</p>
                                     </a>
@@ -179,37 +229,37 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('laporan_hasil_survei.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.laporan_hasil_survei.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Laporan Hasil Survei</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('laporan_ami.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.laporan_ami.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Laporan AMI</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('jadwal_rtm.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.jadwal_rtm.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Jadwal RTM</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('jadwal_ami.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.jadwal_ami.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Jadwal AMI</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('auditor_internal.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.auditor_internal.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Daftar Auditor Internal</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('kalender_mutu.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.kalender_mutu.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Kalender Mutu</p>
                                     </a>
@@ -221,15 +271,21 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('survei_pemangku.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.survei_pemangku.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Survei Pemangku Kepentingan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('sertifikasi_dosen.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.sertifikasi_dosen.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Sertifikasi Dosen</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.pedoman_sertifikasi_dosen.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pedoman Sertifikasi Dosen</p>
                                     </a>
                                 </li>
                             </ul>
@@ -281,6 +337,13 @@
                                 <p>SK & Sertifikat Akreditasi Program Studi</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.mekanisme_pengajuan_akreditasi.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Mekanisme Pengajuan Akreditasi</p>
+                            </a>
+                        </li>
+
                         {{-- Mekanisme --}}
                         {{-- <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
@@ -336,7 +399,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-folder"></i>
                         <p>
-                            Dokumen LPM
+                            Dokumen PJM
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -434,7 +497,7 @@
                     </ul>
                 </li>
                 {{-- ================== STATISTIK ================== --}}
-                <li class="nav-item has-treeview">
+                {{-- <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-chart-bar"></i>
                         <p>
@@ -463,62 +526,27 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 {{-- ================ END STATISTIK ================ --}}
-                {{-- ================== SISTEM INFORMASI MUTU ================== --}}
-                <li class="nav-item has-treeview">
+               <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-network-wired"></i>
+                        <i class="nav-icon fas fa-images"></i>
                         <p>
                             Sistem Informasi Mutu
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
+                    <ul class="nav nav-treeview" style="display: none;">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user-tie"></i>
-                                <p>SISTER</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-clipboard-check"></i>
-                                <p>SIAMI</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-database"></i>
-                                <p>SIMONA</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-comments"></i>
-                                <p>E-Complaint</p>
+                            <a href="{{ route('admin.sistem_informasi_mutu.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sistem Informasi Mutu</p>
                             </a>
                         </li>
                     </ul>
                 </li>
                 {{-- ================ END SISTEM INFORMASI MUTU ================ --}}
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-images"></i>
-                        <p>
-                            Media
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview" style="display: none;">
-                        <li class="nav-item">
-                            <a href="{{ route('media.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Media</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+
                 </li>
             </ul>
         </nav>

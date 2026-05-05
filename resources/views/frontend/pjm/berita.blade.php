@@ -50,8 +50,8 @@ $monthNames = [
                         <h1>{{ $berita->judul }}</h1>
 
                         <div class="post_desc">
-                            <p>{{ $berita->isi }}</p>
-                        </div>
+    {!! nl2br($berita->isi) !!}
+</div>
 
                     </div>
                 </div>

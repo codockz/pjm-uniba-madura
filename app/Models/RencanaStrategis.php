@@ -13,8 +13,13 @@ class RencanaStrategis extends Model
 
     protected $fillable = [
         'judul',
-        'tahun_mulai',
-        'tahun_berakhir',
+        'tahun',
         'file',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'tahun' => 'integer',
     ];
 }

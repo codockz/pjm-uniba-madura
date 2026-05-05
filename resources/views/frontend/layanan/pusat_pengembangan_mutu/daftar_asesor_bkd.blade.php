@@ -18,21 +18,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($data as $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->nama_dosen }}</td>
-                            <td>{{ $item->nira }}</td>
-                            <td>{{ $item->programStudi->nama ?? '-' }}</td>
-                            <td>{{ $item->periode }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">
-                                Data tidak ditemukan
-                            </td>
-                        </tr>
-                    @endforelse
+                   @foreach ($data as $item)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $item->nama_dosen }}</td>
+            <td>{{ $item->nira }}</td>
+            <td>{{ $item->programStudi->nama ?? '-' }}</td>
+            <td>{{ $item->periode }}</td>
+        </tr>
+    @endforeach
+                        
                 </tbody>
 
             </table>

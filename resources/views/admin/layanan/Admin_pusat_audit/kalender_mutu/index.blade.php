@@ -15,18 +15,35 @@
         <div class="card shadow-sm">
             <div class="card-body">
 
+                {{-- 🔽 FILTER --}}
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted small d-flex align-items-center gap-1 me-1">
+                            <i class="fas fa-filter"></i>
+                            Filter
+                        </span>
+
+                        <select id="filterTahun" class="form-select form-select-sm filter-select">
+                            <option value="">Semua</option>
+                            @foreach ($data->pluck('tahun')->unique() as $thn)
+                                <option value="{{ $thn }}">{{ $thn }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 @if ($data->count() > 0)
                     <div class="table-responsive">
-                        <table id="tableKalenderMutu" class="table table-bordered table-hover align-middle text-center">
+                        <table id="tableKalender" class="table table-bordered table-hover align-middle text-center">
 
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th>Judul</th>
-                                    <th width="10%">Tahun</th>
-                                    <th width="15%">Cover</th>
-                                    <th width="15%">File</th>
-                                    <th width="15%">Aksi</th>
+                                    <th>Judul Kalender</th>
+                                    <th>Tahun</th>
+                                    <th>File</th>
+                                    <th>Status</th>
+                                    <th width="20%">Aksi</th>
                                 </tr>
                             </thead>
 
@@ -35,44 +52,58 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
 
-                                        <td class="text-start">
-                                            {{ $item->judul }}
-                                        </td>
+                                        <td class="text-start">{{ $item->judul }}</td>
+
+                                        <td>{{ $item->tahun ?? '-' }}</td>
 
                                         <td>
-                                            <span class="badge bg-info">
-                                                {{ $item->tahun }}
+                                            @if ($item->file)
+                                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank">
+                                                    Download
+                                                </a>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+
+                                        {{-- STATUS --}}
+                                        <td>
+                                            <span class="badge bg-{{ $item->is_active ? 'success' : 'danger' }}">
+                                                {{ $item->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                             </span>
                                         </td>
 
+                                        {{-- AKSI --}}
                                         <td>
-                                            <img src="{{ asset('storage/'. $item->gambar) }}" width="80"
-                                                class="img-thumbnail">
-                                        </td>
 
-                                        <td>
-                                            <a href="{{ asset('storage/' . $item->file_pdf) }}" target="_blank"
-                                                class="btn btn-success btn-sm">
-                                                Lihat PDF
-                                            </a>
-                                        </td>
+                                            {{-- TOGGLE --}}
+                                            <form action="{{ route('admin.kalender_mutu.toggle', $item->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                <button
+                                                    class="btn btn-sm {{ $item->is_active ? 'btn-success' : 'btn-secondary' }}">
+                                                    <i
+                                                        class="fas {{ $item->is_active ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
+                                                </button>
+                                            </form>
 
-                                        <td>
+                                            {{-- EDIT --}}
                                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#modalEdit{{ $item->id }}">
-                                                Edit
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
-                                            <form action="{{ route('kalender_mutu.destroy', $item->id) }}" method="POST"
-                                                class="d-inline">
+                                            {{-- DELETE --}}
+                                            <form action="{{ route('admin.kalender_mutu.destroy', $item->id) }}"
+                                                method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin hapus data?')">
-                                                    Hapus
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -82,7 +113,7 @@
                     </div>
                 @else
                     <div class="alert alert-info text-center">
-                        Belum ada data kalender mutu.
+                        Belum ada data Kalender Mutu.
                     </div>
                 @endif
 
@@ -91,8 +122,8 @@
 
     </div>
 
-    {{-- ================= CREATE ================= --}}
-    <div class="modal fade" id="modalCreate">
+    {{-- ================= MODAL CREATE ================= --}}
+    <div class="modal fade" id="modalCreate" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -101,14 +132,14 @@
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form action="{{ route('kalender_mutu.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.kalender_mutu.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="modal-body">
 
                         <div class="mb-3">
                             <label>Judul</label>
-                            <input type="text" name="judul" class="form-control">
+                            <input type="text" name="judul" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
@@ -117,25 +148,23 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>Upload Cover</label>
-                            <input type="file" name="gambar" class="form-control">
+                            <label>Status</label>
+                            <select name="is_active" class="form-control">
+                                <option value="1">Aktif</option>
+                                <option value="0">Tidak Aktif</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
-                            <label>Upload PDF</label>
-                            <input type="file" name="file_pdf" class="form-control">
+                            <label>File (PDF)</label>
+                            <input type="file" name="file" class="form-control" required>
                         </div>
 
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">
-                            Batal
-                        </button>
-
-                        <button class="btn btn-primary">
-                            Simpan
-                        </button>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button class="btn btn-primary">Simpan</button>
                     </div>
 
                 </form>
@@ -144,9 +173,9 @@
         </div>
     </div>
 
-    {{-- ================= EDIT ================= --}}
+    {{-- ================= MODAL EDIT ================= --}}
     @foreach ($data as $item)
-        <div class="modal fade" id="modalEdit{{ $item->id }}">
+        <div class="modal fade" id="modalEdit{{ $item->id }}" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
 
@@ -155,7 +184,7 @@
                         <button class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <form action="{{ route('kalender_mutu.update', $item->id) }}" method="POST"
+                    <form action="{{ route('admin.kalender_mutu.update', $item->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -164,7 +193,8 @@
 
                             <div class="mb-3">
                                 <label>Judul</label>
-                                <input type="text" name="judul" value="{{ $item->judul }}" class="form-control">
+                                <input type="text" name="judul" value="{{ $item->judul }}" class="form-control"
+                                    required>
                             </div>
 
                             <div class="mb-3">
@@ -173,25 +203,28 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>Ganti Cover</label>
-                                <input type="file" name="gambar" class="form-control">
+                                <label>Status</label>
+                                <select name="is_active" class="form-control">
+                                    <option value="1" {{ $item->is_active ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ !$item->is_active ? 'selected' : '' }}>Tidak Aktif</option>
+                                </select>
                             </div>
 
                             <div class="mb-3">
-                                <label>Ganti PDF</label>
-                                <input type="file" name="file_pdf" class="form-control">
+                                <label>File</label>
+                                <input type="file" name="file" class="form-control">
+                                @if ($item->file)
+                                    <small>File saat ini: {{ $item->file }}</small>
+                                @endif
                             </div>
 
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Batal
                             </button>
-
-                            <button class="btn btn-primary">
-                                Update
-                            </button>
+                            <button class="btn btn-primary">Update</button>
                         </div>
 
                     </form>
@@ -204,7 +237,11 @@
     @push('scripts')
         <script>
             $(function() {
-                initDataTable("#tableKalenderMutu");
+                let table = initDataTable('#tableKalender');
+
+                $('#filterTahun').on('change', function() {
+                    table.column(2).search(this.value).draw();
+                });
             });
         </script>
     @endpush

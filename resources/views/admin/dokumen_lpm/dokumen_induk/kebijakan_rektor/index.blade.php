@@ -55,9 +55,9 @@
                                         </td>
 
                                         <td>
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#modalEdit{{ $item->id }}">
-                                                Edit
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $item->id }}" title="Edit Data">
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
                                             <form action="{{ route('admin.kebijakan_rektor.destroy', $item->id) }}"
@@ -65,9 +65,8 @@
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                    Hapus
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -102,21 +101,37 @@
 
                     <div class="modal-body">
 
-                        <input type="number" name="tahun" class="form-control mb-2" placeholder="Tahun" required>
+                        <div class="mb-3">
+                            <label>Tahun</label>
+                            <input type="number" name="tahun" class="form-control" required>
+                        </div>
 
-                        <input type="text"name="nomor" class="form-control mb-2" placeholder="Nomor">
+                        <div class="mb-3">
+                            <label>Nomor</label>
+                            <input type="text" name="nomor" class="form-control">
+                        </div>
 
-                        <input type="text" name="dokumen" class="form-control mb-2"
-                            placeholder="Jenis Dokumen (SK, Maklumat, dll)">
+                        <div class="mb-3">
+                            <label>Jenis Dokumen</label>
+                            <input type="text" name="dokumen" class="form-control" placeholder="SK, Maklumat, dll">
+                        </div>
 
-                        <textarea name="tentang" class="form-control mb-2" placeholder="Tentang"></textarea>
+                        <div class="mb-3">
+                            <label>Tentang</label>
+                            <textarea name="tentang" class="form-control" rows="3"></textarea>
+                        </div>
 
-                        <input type="date" name="tanggal_terbit" class="form-control mb-2">
+                        <div class="mb-3">
+                            <label>Tanggal Terbit</label>
+                            <input type="date" name="tanggal_terbit" class="form-control">
+                        </div>
 
-                        <input type="file" name="file" class="form-control">
+                        <div class="mb-3">
+                            <label>File</label>
+                            <input type="file" name="file" class="form-control">
+                        </div>
 
                     </div>
-
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button class="btn btn-primary">Simpan</button>
@@ -146,24 +161,44 @@
 
                         <div class="modal-body">
 
-                            <input type="number" name="tahun" value="{{ $item->tahun }}" class="form-control mb-2"
-                                required>
+                            <div class="mb-3">
+                                <label>Tahun</label>
+                                <input type="number" name="tahun" value="{{ $item->tahun }}" class="form-control"
+                                    required>
+                            </div>
 
-                            <input type="text" name="nomor" value="{{ $item->nomor }}" class="form-control mb-2">
+                            <div class="mb-3">
+                                <label>Nomor</label>
+                                <input type="text" name="nomor" value="{{ $item->nomor }}" class="form-control">
+                            </div>
 
-                            <input type="text" name="dokumen" value="{{ $item->dokumen }}" class="form-control mb-2">
+                            <div class="mb-3">
+                                <label>Jenis Dokumen</label>
+                                <input type="text" name="dokumen" value="{{ $item->dokumen }}" class="form-control">
+                            </div>
 
-                            <textarea name="tentang" class="form-control mb-2">{{ $item->tentang }}</textarea>
+                            <div class="mb-3">
+                                <label>Tentang</label>
+                                <textarea name="tentang" class="form-control" rows="3">{{ $item->tentang }}</textarea>
+                            </div>
 
-                            <input type="date" name="tanggal_terbit" value="{{ $item->tanggal_terbit }}"
-                                class="form-control mb-2">
+                            <div class="mb-3">
+                                <label>Tanggal Terbit</label>
+                                <input type="date" name="tanggal_terbit" value="{{ $item->tanggal_terbit }}"
+                                    class="form-control">
+                            </div>
 
-                            <input type="file" name="file" class="form-control">
+                            <div class="mb-3">
+                                <label>File</label>
+                                <input type="file" name="file" class="form-control">
+                            </div>
 
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
                             <button class="btn btn-primary">Update</button>
                         </div>
 

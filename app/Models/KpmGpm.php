@@ -7,7 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class KpmGpm extends Model
 {
+    use HasFactory;
+
     protected $table = 'kpm_gpm';
-    protected $fillable = ['judul', 'file'];
+    protected $fillable = [
+        'judul',
+        'tahun',
+        'file',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'tahun' => 'integer',
+    ];
 }
 

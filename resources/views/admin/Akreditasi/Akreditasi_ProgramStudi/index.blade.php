@@ -26,6 +26,8 @@
                                     <th>SK Izin</th>
                                     <th>Akreditasi</th>
                                     <th>SK Akreditasi</th>
+                                    <th>Berlaku</th>
+                                    <th>Kadaluarsa</th>
                                     <th>Sertifikat</th>
                                     <th width="15%">Aksi</th>
                                 </tr>
@@ -62,6 +64,13 @@
                                                 -
                                             @endif
                                         </td>
+                                           <td>
+    {{ $item->berlaku ?? '-' }}
+</td>
+
+<td>
+    {{ $item->kadaluarsa ?? '-' }}
+</td>
                                         <td>
                                             @if ($item->file)
                                                 <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
@@ -73,9 +82,9 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#modalEdit{{ $item->id }}">
-                                                Edit
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $item->id }}" title="Edit Data">
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
                                             <form action="{{ route('admin.sk_akreditasi_prodi.destroy', $item->id) }}"
@@ -83,9 +92,8 @@
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                    Hapus
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -154,6 +162,15 @@
                         <div class="mb-3">
                             <label>File SK Akreditasi (PDF)</label>
                             <input type="file" name="file_sk_akreditasi" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                        <label>Tanggal Berlaku</label>
+                         <input type="date" name="berlaku" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                       <label>Tanggal Kadaluarsa</label>
+                         <input type="date" name="kadaluarsa" class="form-control">
                         </div>
 
                         <div class="mb-3">
@@ -233,6 +250,15 @@
                             </div>
 
                             <div class="mb-3">
+                            <label>Tanggal Berlaku</label>
+                          <input type="date" name="berlaku" value="{{ $item->berlaku }}" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>Tanggal Kadaluarsa</label>
+    <input type="date" name="kadaluarsa" value="{{ $item->kadaluarsa }}" class="form-control">
+</div>
+                            <div class="mb-3">
                                 <label>File Sertifikat (PDF)</label>
                                 <input type="file" name="file" class="form-control">
                                 @if ($item->file)
@@ -243,7 +269,9 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
                             <button class="btn btn-primary">Update</button>
                         </div>
 

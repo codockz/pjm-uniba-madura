@@ -15,14 +15,34 @@
         <div class="card shadow-sm">
             <div class="card-body">
 
+                {{-- 🔽 FILTER --}}
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted small d-flex align-items-center gap-1 me-1">
+                            <i class="fas fa-filter"></i>
+                            Filter
+                        </span>
+
+                        <select id="filterTahun" class="form-select form-select-sm filter-select">
+                            <option value="">Semua</option>
+                            @foreach ($data->pluck('tahun')->unique() as $thn)
+                                <option value="{{ $thn }}">{{ $thn }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 @if ($data->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover text-center">
+                        <table id="tableAkademik" class="table table-bordered table-hover align-middle text-center">
+
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th width="5%">No</th>
+                                    <th>Judul Kalender</th>
                                     <th>Tahun</th>
                                     <th>File</th>
+                                    <th>Status</th>
                                     <th width="20%">Aksi</th>
                                 </tr>
                             </thead>
@@ -32,45 +52,68 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
 
+                                        <td class="text-start">{{ $item->judul }}</td>
+
+                                        <td>{{ $item->tahun ?? '-' }}</td>
+
                                         <td>
-                                            <span class="badge bg-info">
-                                                {{ $item->tahun }}
+                                            @if ($item->file)
+                                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank">
+                                                    Download
+                                                </a>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+
+                                        {{-- STATUS --}}
+                                        <td>
+                                            <span class="badge bg-{{ $item->is_active ? 'success' : 'danger' }}">
+                                                {{ $item->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                             </span>
                                         </td>
 
+                                        {{-- AKSI --}}
                                         <td>
-                                            <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
-                                                class="btn btn-success btn-sm">
-                                                Lihat PDF
-                                            </a>
-                                        </td>
 
-                                        <td>
+                                            {{-- TOGGLE --}}
+                                            <form action="{{ route('admin.kalender_akademik.toggle', $item->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                <button
+                                                    class="btn btn-sm {{ $item->is_active ? 'btn-success' : 'btn-secondary' }}">
+                                                    <i
+                                                        class="fas {{ $item->is_active ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
+                                                </button>
+                                            </form>
+
+                                            {{-- EDIT --}}
                                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#modalEdit{{ $item->id }}">
-                                                Edit
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
+                                            {{-- DELETE --}}
                                             <form action="{{ route('admin.kalender_akademik.destroy', $item->id) }}"
                                                 method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin hapus?')">
-                                                    Hapus
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
-                                        </td>
 
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                     </div>
                 @else
                     <div class="alert alert-info text-center">
-                        Belum ada data kalender akademik
+                        Belum ada data Kalender Akademik.
                     </div>
                 @endif
 
@@ -80,7 +123,7 @@
     </div>
 
     {{-- ================= MODAL CREATE ================= --}}
-    <div class="modal fade" id="modalCreate">
+    <div class="modal fade" id="modalCreate" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -95,25 +138,33 @@
                     <div class="modal-body">
 
                         <div class="mb-3">
-                            <label>Tahun</label>
-                            <input type="number" name="tahun" class="form-control" required>
+                            <label>Judul</label>
+                            <input type="text" name="judul" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
-                            <label>Upload PDF</label>
-                            <input type="file" name="file" class="form-control" accept="application/pdf" required>
+                            <label>Tahun</label>
+                            <input type="number" name="tahun" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Status</label>
+                            <select name="is_active" class="form-control">
+                                <option value="1">Aktif</option>
+                                <option value="0">Tidak Aktif</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>File (PDF)</label>
+                            <input type="file" name="file" class="form-control" required>
                         </div>
 
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">
-                            Batal
-                        </button>
-
-                        <button class="btn btn-primary">
-                            Simpan
-                        </button>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button class="btn btn-primary">Simpan</button>
                     </div>
 
                 </form>
@@ -124,7 +175,7 @@
 
     {{-- ================= MODAL EDIT ================= --}}
     @foreach ($data as $item)
-        <div class="modal fade" id="modalEdit{{ $item->id }}">
+        <div class="modal fade" id="modalEdit{{ $item->id }}" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
 
@@ -141,25 +192,39 @@
                         <div class="modal-body">
 
                             <div class="mb-3">
+                                <label>Judul</label>
+                                <input type="text" name="judul" value="{{ $item->judul }}" class="form-control"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
                                 <label>Tahun</label>
                                 <input type="number" name="tahun" value="{{ $item->tahun }}" class="form-control">
                             </div>
 
                             <div class="mb-3">
-                                <label>Ganti PDF</label>
+                                <label>Status</label>
+                                <select name="is_active" class="form-control">
+                                    <option value="1" {{ $item->is_active ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ !$item->is_active ? 'selected' : '' }}>Tidak Aktif</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>File</label>
                                 <input type="file" name="file" class="form-control">
+                                @if ($item->file)
+                                    <small>File saat ini: {{ $item->file }}</small>
+                                @endif
                             </div>
 
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Batal
                             </button>
-
-                            <button class="btn btn-primary">
-                                Update
-                            </button>
+                            <button class="btn btn-primary">Update</button>
                         </div>
 
                     </form>
@@ -168,5 +233,17 @@
             </div>
         </div>
     @endforeach
+
+    @push('scripts')
+        <script>
+            $(function() {
+                let table = initDataTable('#tableAkademik');
+
+                $('#filterTahun').on('change', function() {
+                    table.column(2).search(this.value).draw();
+                });
+            });
+        </script>
+    @endpush
 
 @endsection

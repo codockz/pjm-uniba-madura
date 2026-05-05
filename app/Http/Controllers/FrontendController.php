@@ -23,6 +23,8 @@ use App\Models\KategoriDokumen;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Models\SidebarCategory;
+use App\Models\Slider;
 
 class FrontendController extends Controller
 {
@@ -36,7 +38,6 @@ class FrontendController extends Controller
     $jumlh_media = Media::count();
     $kategori = KategoriDokumen::all();
     $sub_kategori = SubKategoriDokumen::all();
-
     $media = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')
         ->where('nama_kategori', 'Pengumuman')
         ->select('media.*', 'kategori_media.nama_kategori')
@@ -47,10 +48,13 @@ class FrontendController extends Controller
     $berita = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')
         ->where('nama_kategori', 'Berita')
         ->select('media.*', 'kategori_media.nama_kategori')
-        ->orderBy('created_at', 'asc')
-        ->limit(4)
-        ->get();
+        ->orderBy('created_at', 'desc')
+        ->paginate(8);
 
+    $sidebar = SidebarCategory::with('items')
+    ->where('is_active', 1)
+    ->orderBy('urutan')
+    ->get();
     // ✅ SAFE DATE
     try {
         $now = request()->has('month')
@@ -81,12 +85,13 @@ class FrontendController extends Controller
         ->get();
 
     $recentPosts = Media::latest()->take(5)->get();
+    $sliders = Slider::latest()->get();
 
     return view('frontend.pjm.index', compact(
         'data', 'dokumen', 'media', 'berita', 'content_footer', 'about',
         'kerjasama', 'jumlh_media', 'kategori', 'sub_kategori',
         'now', 'daysInMonth', 'startDay', 'recentPosts',
-        'datesWithBerita', 'arsip', 'year', 'month'
+        'datesWithBerita', 'arsip', 'year', 'month','sidebar','sliders'
     ));
 }
     public function Dokumen(Request $request, $data)
@@ -371,7 +376,7 @@ class FrontendController extends Controller
             ->where('nama_kategori', 'Berita')
             ->where('slug', '!=', $berita->slug) // Exclude the news with the same slug
             ->select('media.*', 'kategori_media.nama_kategori')
-            ->orderBy('created_at', 'ASC')
+            ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
         // dd($semua_berita);
@@ -396,23 +401,23 @@ class FrontendController extends Controller
         return view('frontend.pjm.pengumuman', compact('berita', 'pengumuman', 'semua_pengumuman', 'content_footer'));
     }
 
-    // public function mediaAgenda($slug)
-    // {
-    //     $content_footer = ContentFooter::first();
-    //     $berita = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')->where('nama_kategori', 'Berita')->select('media.*', 'kategori_media.nama_kategori')->get();
-    //     $pengumuman = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')->where('nama_kategori', 'Pengumuman')->select('media.*', 'kategori_media.nama_kategori')->get();
-    //     $agenda = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')->leftJoin('users', 'users.id', 'media.user_id')->where('slug', $slug)->select('media.*', 'kategori_media.nama_kategori', 'users.name')->first();
-    //     // dd($agenda->tanggal);
-    //     $semua_agenda = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')
-    //         ->where('nama_kategori', 'Agenda')
-    //         ->where('slug', '!=', $agenda->slug) // Exclude the news with the same slug
-    //         ->select('media.*', 'kategori_media.nama_kategori')
-    //         ->orderBy('created_at', 'ASC')
-    //         ->take(5)
-    //         ->get();
-    //     // dd($semua_berita);
-    //     return view('frontend.pjm.agenda', compact('pengumuman', 'agenda', 'semua_agenda', 'content_footer', 'berita'));
-    // }
+    public function mediaAgenda($slug)
+    {
+        $content_footer = ContentFooter::first();
+        $berita = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')->where('nama_kategori', 'Berita')->select('media.*', 'kategori_media.nama_kategori')->get();
+        $pengumuman = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')->where('nama_kategori', 'Pengumuman')->select('media.*', 'kategori_media.nama_kategori')->get();
+        $agenda = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')->leftJoin('users', 'users.id', 'media.user_id')->where('slug', $slug)->select('media.*', 'kategori_media.nama_kategori', 'users.name')->first();
+        // dd($agenda->tanggal);
+        $semua_agenda = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')
+            ->where('nama_kategori', 'Agenda')
+            ->where('slug', '!=', $agenda->slug) // Exclude the news with the same slug
+            ->select('media.*', 'kategori_media.nama_kategori')
+            ->orderBy('created_at', 'ASC')
+            ->take(5)
+            ->get();
+        // dd($semua_berita);
+        return view('frontend.pjm.agenda', compact('pengumuman', 'agenda', 'semua_agenda', 'content_footer', 'berita'));
+    }
     public function pengumuman()
     {
         $content_footer = ContentFooter::first();
@@ -436,12 +441,23 @@ class FrontendController extends Controller
 
         return view('frontend.foto.index', compact('foto', 'content_footer'));
     }
+
+    public function agenda()
+    {
+        $content_footer = ContentFooter::first();
+        $agenda = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')->where('nama_kategori', 'Agenda')->select('media.*', 'kategori_media.nama_kategori')->get();
+
+        return view('frontend.agenda.index', compact('agenda', 'content_footer'));
+    }
+
+
     public function byMonth($year, $month)
 {
     // ✅ VALIDASI PARAMETER
     if (!is_numeric($year) || !is_numeric($month)) {
         $year  = now()->year;
         $month = now()->month;
+
     }
 
     try {
@@ -455,17 +471,22 @@ class FrontendController extends Controller
         ->select('media.*', 'kategori_media.nama_kategori')
         ->latest()
         ->get();
-
+    $sliders = Slider::latest()->get();
     $berita = Media::whereYear('tanggal', $date->year)
         ->whereMonth('tanggal', $date->month)
         ->latest()
-        ->get();
+        ->paginate(8);
 
-    $kerjasama = Media::leftJoin('kategori_media', 'kategori_media.id', 'media.kategori_media_id')
-        ->where('kategori_media.nama_kategori', 'Kerjasama')
-        ->select('media.*', 'kategori_media.nama_kategori')
-        ->latest()
-        ->get();
+    $sidebar = SidebarCategory::with('items')
+    ->where('is_active', 1)
+    ->orderBy('urutan')
+    ->get();
+
+    $data = SettingHalamanUtama::all();
+    $about = About::first();
+    $content_footer = ContentFooter::first();
+
+    $kerjasama = Kerjasama::all();
 
     $jumlh_media = Media::count();
 
@@ -490,6 +511,9 @@ class FrontendController extends Controller
     $recentPosts = Media::latest()->take(5)->get();
 
     return view('frontend.pjm.index', [
+        'data' => $data,
+        'about' => $about,
+        'content_footer' => $content_footer,
         'berita' => $berita,
         'dokumen' => $dokumen,
         'year' => $now->year,
@@ -501,7 +525,9 @@ class FrontendController extends Controller
         'daysInMonth' => $daysInMonth,
         'startDay' => $startDay,
         'datesWithBerita' => $datesWithBerita,
-        'arsip' => $arsip
+        'arsip' => $arsip,
+        'sidebar' => $sidebar,
+        'sliders' => $sliders
     ]);
 }
 }

@@ -45,6 +45,7 @@ use App\Http\Controllers\frontend\Layanan\PusatPengembangan\SiklusSPMIController
 use App\Http\Controllers\frontend\Layanan\PusatPengembangan\SuratTugasMonevController;
 use App\Http\Controllers\frontend\akreditasi\akreditasi_institusi\AkreditasiInstitusiController;
 use App\Http\Controllers\frontend\akreditasi\akreditasi_program_studi\SkAkreditasiController;
+use App\Http\Controllers\frontend\akreditasi\Mekanisme\MekanismePengajuanAkreditasiController;
 use App\Http\Controllers\frontend\dokumenlpm\DokumenInduk\RegulasiController;
 use App\Http\Controllers\frontend\dokumenlpm\DokumenInduk\KebijakanRektorController;
 use App\Http\Controllers\frontend\dokumenlpm\DokumenInduk\RencanaIndukPengembanganController;
@@ -56,6 +57,9 @@ use App\Http\Controllers\frontend\dokumenlpm\DokumenMutu\DokumenSPMIController;
 use App\Http\Controllers\frontend\dokumenlpm\DokumenMutu\PedomanController;
 use App\Http\Controllers\frontend\dokumenlpm\DokumenMutu\StandarController;
 use App\Http\Controllers\frontend\dokumenlpm\DokumenMutu\SopController;
+use App\Http\Controllers\frontend\mutu\SistemInformasiMutuController;
+
+
 
 use App\Http\Controllers\frontend\profil\ProfilPjmController;
 use App\Http\Controllers\frontend\profil\VisiDanMisiController;
@@ -75,10 +79,12 @@ use App\Http\Controllers\Admin\layanan\PusatAudit\AdminJadwalRtmController;
 use App\Http\Controllers\Admin\layanan\PusatAudit\AdminJadwalAmiController;
 use App\Http\Controllers\Admin\layanan\PusatAudit\AdminAuditorInternalController;
 use App\Http\Controllers\Admin\layanan\PusatAudit\AdminSertifikasiDosenController;
+use App\Http\Controllers\Admin\layanan\PusatAudit\AdminPedomanSertifikasiDosenController;
 use App\Http\Controllers\Admin\layanan\PusatAudit\AdminSurveiPemangkuKepentinganController;
 use App\Http\Controllers\Admin\layanan\PusatAudit\AdminKalenderAkademikController;
 use App\Http\Controllers\Admin\akreditasi\Institusi\AdminAkreditasiInstitusiController;
 use App\Http\Controllers\Admin\akreditasi\ProgramStudi\AdminSkAkreditasiController;
+use App\Http\Controllers\Admin\akreditasi\Mekanisme\AdminMekanismePengajuanAkreditasiController;
 use App\Http\Controllers\Admin\dokumenlpm\DokumenInduk\AdminRegulasiController;
 use App\Http\Controllers\Admin\dokumenlpm\DokumenInduk\AdminKebijakanRektorController;
 use App\Http\Controllers\Admin\dokumenlpm\DokumenInduk\AdminRencanaIndukPengembanganController;
@@ -90,6 +96,10 @@ use App\Http\Controllers\Admin\dokumenlpm\DokumenMutu\AdminDokumenSPMIController
 use App\Http\Controllers\Admin\dokumenlpm\DokumenMutu\AdminPedomanController;
 use App\Http\Controllers\Admin\dokumenlpm\DokumenMutu\AdminStandarController;
 use App\Http\Controllers\Admin\dokumenlpm\DokumenMutu\AdminSopController;
+use App\Http\Controllers\Admin\Mutu\AdminSistemInformasiMutuController;
+use App\Http\Controllers\Admin\SidebarCategoryController;
+use App\Http\Controllers\Admin\SidebarItemController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Models\KebijakanRektor;
 
 Route::get('/', [App\Http\Controllers\FrontendController::class, 'frontend'])->name('frontend.frontend');
@@ -121,8 +131,8 @@ Route::get('/kpm-gpm', [KpmGpmController::class, 'index'])->name('frontend.kpm_g
 Route::get('/surat-tugas-monev', [SuratTugasMonevController::class, 'index'])->name('frontend.surat_tugas_monev');
 Route::get('/laporan-monev', [LaporanMonevController::class, 'index'])->name('frontend.laporan_monev');
 // Pusat Audit mutu
-Route::get('/laporan-hasil-survei/{tahun}',[LaporanHasilSurveiController::class, 'index'])->name('frontend.laporan_hasil_survei');
-Route::get('/laporan-ami/{tahun}',[LaporanAmiController::class, 'index'])->name('frontend.laporan_ami');
+Route::get('/laporan-hasil-survei',[LaporanHasilSurveiController::class, 'index'])->name('frontend.laporan_hasil_survei');
+Route::get('/laporan-ami',[LaporanAmiController::class, 'index'])->name('frontend.laporan_ami');
 
 
 
@@ -131,25 +141,20 @@ Route::get('/jadwal-ami', [JadwalAmiController::class, 'index'])->name('frontend
 Route::get('/daftar-auditor-internal', [DaftarAuditorInternalController::class, 'index'])->name('frontend.daftar_auditor_internal');
 Route::get('/sertifikasi-dosen', [SertifikasiDosenController::class, 'index'])->name('frontend.sertifikasi_dosen');
 
-Route::get('/kalender-mutu/{tahun}',[KalenderMutuController::class, 'index'])->name('frontend.kalender_mutu');
-Route::get('/kalender-akademik/{tahun}', [KalenderAkademikController::class, 'index']) ->name('frontend.kalender_akademik');
+Route::get('/kalender-mutu',[KalenderMutuController::class, 'index'])->name('frontend.kalender_mutu');
+Route::get('/kalender-akademik', [KalenderAkademikController::class, 'index']) ->name('frontend.kalender_akademik');
 Route::get('/jadwal-rtm', [JadwalRtmController::class, 'index'])->name('frontend.jadwal_rtm');
 Route::get('/survei-pemangku', [SurveiPemangkuController::class, 'index'])->name('frontend.survei_pemangku');
 
 //Frontend Siklus SPMI
 Route::prefix('layanan')->name('frontend.layanan.')->group(function () {
 Route::get('/siklus-spmi', [SiklusSPMIController::class, 'index'])->name('siklus-spmi');
-
-
 });
-
-
-
-
 
 //akreditasi
 Route::get('/akreditasi-institusi', [AkreditasiInstitusiController::class, 'index'])->name('frontend.akreditasi_institusi');
 Route::get('/sk-akreditasi-program-studi', [SkAkreditasiController::class, 'index'])->name('frontend.akreditasi_program_studi');
+Route::get('/mekanisme-pengajuan-akreditasi', [MekanismePengajuanAkreditasiController::class, 'index'])->name('frontend.mekanisme_pengajuan_akreditasi');
 
 //dokumen induk
 Route::get('/regulasi', [RegulasiController::class, 'index'])->name('frontend.regulasi');
@@ -165,10 +170,12 @@ Route::get('/dokumen-spmi', [DokumenSPMIController::class, 'index'])->name('fron
 Route::get('/pedoman', [PedomanController::class, 'index'])->name('frontend.pedoman');
 Route::get('/standar', [StandarController::class, 'index'])->name('frontend.standar');
 Route::get('/sop', [SopController::class, 'index'])->name('frontend.sop');
+Route::get('/sistem-informasi-mutu', [SistemInformasiMutuController::class, 'index'])->name('frontend.sistem_informasi_mutu');
 
 //statistik
 Route::get('/statistik-dosen', function () {return view('frontend.statistik.data_dosen.index');})->name('statistik.dosen');
 Route::get('/statistik-mahasiswa', function () {return view('frontend.statistik.data_mahasiswa.index');})->name('statistik.mahasiswa');
+Route::get('/statistik-alumni', function () {return view('frontend.statistik.data_alumni.index');})->name('statistik.alumni');
 
 // frontend dokumen Mutu
 Route::get('/dokumen/{data}', [App\Http\Controllers\FrontendController::class, 'Dokumen'])->name('frontend.dokumen');
@@ -199,12 +206,12 @@ Route::get('/laporan-kegiatan', [App\Http\Controllers\FrontendController::class,
 // // media
 Route::get('/media-berita/{slug}', [App\Http\Controllers\FrontendController::class, 'mediaBertia'])->name('frontend.showBerita');
 Route::get('/media-pengumuman/{slug}', [App\Http\Controllers\FrontendController::class, 'mediaPengumuman'])->name('frontend.showPengumuman');
-// Route::get('/media-agenda/{slug}', [App\Http\Controllers\FrontendController::class, 'mediaAgenda'])->name('frontend.showAgenda');
+Route::get('/media-agenda/{slug}', [App\Http\Controllers\FrontendController::class, 'mediaAgenda'])->name('frontend.showAgenda');
 
 Route::get('/pengumuman', [App\Http\Controllers\FrontendController::class, 'pengumuman'])->name('frontend.pengumuman');
 Route::get('/berita', [App\Http\Controllers\FrontendController::class, 'berita'])->name('frontend.berita');
 Route::get('/foto', [App\Http\Controllers\FrontendController::class, 'foto'])->name('frontend.foto');
-// Route::get('/agenda', [App\Http\Controllers\FrontendController::class, 'agenda'])->name('frontend.agenda');
+Route::get('/agenda', [App\Http\Controllers\FrontendController::class, 'agenda'])->name('frontend.agenda');
 
 Auth::routes();
 // -- admin -- //
@@ -221,6 +228,13 @@ Route::post('/profile-delete', [ProfilePjmAdminController::class, 'delete'])->na
 //master data
 Route::prefix('admin')->name('admin.')->group(function () {
 Route::resource('program-studi', ProgramStudiController::class);});
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    // kategori
+    Route::resource('sidebar-category', SidebarCategoryController::class);
+    // item
+    Route::resource('sidebar-item', SidebarItemController::class);
+});
 
 //layanan
 //Daftar Asesor BKD Admin
@@ -242,33 +256,67 @@ Route::delete('/admin/siklus-spmi/delete/{id}', [AdminSiklusSpmiController::clas
 Route::post('/admin/siklus-spmi/upload-diagram', [AdminSiklusSpmiController::class, 'uploadDiagram'])->name('admin.siklus-spmi.uploadDiagram');
 
 
-Route::prefix('admin')->group(function () {
-Route::resource('kpm_gpm', AdminKpmGpmController::class);
-Route::resource('surat_tugas_monev', AdminSuratTugasMonevController::class);
-Route::resource('laporan_monev', AdminLaporanMonevController::class);
-Route::resource('laporan_hasil_survei', AdminLaporanHasilSurveiController::class);
-Route::resource('laporan_ami', AdminLaporanAmiController::class);
-Route::resource('jadwal_rtm', AdminJadwalRtmController::class);
-Route::resource('jadwal_ami', AdminJadwalAmiController::class);
-Route::resource('auditor_internal', AdminAuditorInternalController::class);
-Route::resource('sertifikasi_dosen', AdminSertifikasiDosenController::class);
-Route::resource('kalender_mutu', AdminKalenderMutuController::class);
-Route::resource('survei_pemangku', AdminSurveiPemangkuKepentinganController::class);
-});
 
+// Route::prefix('admin')->group(function () {
+// Route::resource('kpm_gpm', AdminKpmGpmController::class);
+// Route::post('kpm_gpm/{id}/toggle', [AdminKpmGpmController::class, 'toggle'])->name('admin.kpm_gpm.toggle');
+// Route::resource('surat_tugas_monev', AdminSuratTugasMonevController::class);
+// Route::resource('laporan_monev', AdminLaporanMonevController::class);
+// Route::resource('laporan_hasil_survei', AdminLaporanHasilSurveiController::class);
+// Route::resource('laporan_ami', AdminLaporanAmiController::class);
+// Route::resource('jadwal_rtm', AdminJadwalRtmController::class);
+// Route::resource('jadwal_ami', AdminJadwalAmiController::class);
+// Route::resource('auditor_internal', AdminAuditorInternalController::class);
+// Route::resource('sertifikasi_dosen', AdminSertifikasiDosenController::class);
+// Route::resource('kalender_mutu', AdminKalenderMutuController::class);
+// Route::resource('survei_pemangku', AdminSurveiPemangkuKepentinganController::class);
+// });
+
+//layanan
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('kpm_gpm', AdminKpmGpmController::class);
+    Route::post('kpm_gpm/{id}/toggle', [AdminKpmGpmController::class, 'toggle'])->name('kpm_gpm.toggle');
+    Route::resource('surat_tugas_monev', AdminSuratTugasMonevController::class);
+    Route::post('surat_tugas_monev/{id}/toggle', [AdminSuratTugasMonevController::class, 'toggle'])->name('surat_tugas_monev.toggle');
+    Route::resource('laporan_monev', AdminLaporanMonevController::class);
+    Route::post('laporan_monev/{id}/toggle', [AdminLaporanMonevController::class, 'toggle'])->name('laporan_monev.toggle');
+    Route::resource('laporan_hasil_survei', AdminLaporanHasilSurveiController::class);
+    Route::post('laporan_hasil_survei/{id}/toggle', [AdminLaporanHasilSurveiController::class, 'toggle'])->name('laporan_hasil_survei.toggle');
+    Route::resource('laporan_ami', AdminLaporanAmiController::class);
+    Route::post('laporan_ami/{id}/toggle', [AdminLaporanAmiController::class, 'toggle']) ->name('laporan_ami.toggle');
+    Route::resource('jadwal_rtm', AdminJadwalRtmController::class);
+    Route::post('jadwal_rtm/{id}/toggle', [AdminJadwalRtmController::class, 'toggle'])->name('jadwal_rtm.toggle');
+    Route::resource('jadwal_ami', AdminJadwalAmiController::class);
+    Route::post('jadwal_ami/{id}/toggle', [AdminJadwalAmiController::class, 'toggle'])->name('jadwal_ami.toggle');
+    Route::resource('auditor_internal', AdminAuditorInternalController::class);
+    Route::resource('sertifikasi_dosen', AdminSertifikasiDosenController::class);
+    Route::resource('pedoman_sertifikasi_dosen', AdminPedomanSertifikasiDosenController::class);
+    Route::resource('kalender_mutu', AdminKalenderMutuController::class);
+    Route::post('kalender_mutu/{id}/toggle', [AdminKalenderMutuController::class, 'toggle'])->name('kalender_mutu.toggle');
+    Route::resource('kalender_akademik', AdminKalenderAkademikController::class);
+    Route::post('kalender_akademik/{id}/toggle', [AdminKalenderAkademikController::class, 'toggle'])->name('kalender_akademik.toggle');
+    Route::resource('survei_pemangku', AdminSurveiPemangkuKepentinganController::class);
+    Route::resource('akreditasi_institusi', AdminAkreditasiInstitusiController::class);
+
+});
+//aakreditasi
 Route::prefix('admin')->name('admin.')->group(function () {
 Route::resource('akreditasi_institusi', AdminAkreditasiInstitusiController::class);
 Route::resource('sk_akreditasi_prodi', AdminSkAkreditasiController::class);
-Route::resource('kalender_akademik', AdminKalenderAkademikController::class);
+Route::resource('mekanisme_pengajuan_akreditasi', AdminMekanismePengajuanAkreditasiController::class);
 });
+
 
 Route::prefix('admin')->name('admin.')->group(function () {
 Route::resource('regulasi', AdminRegulasiController::class);
 Route::resource('kebijakan_rektor', AdminKebijakanRektorController::class);
 Route::resource('rencana_induk_pengembangan', AdminRencanaIndukPengembanganController::class);
 Route::resource('rencana_strategis', AdminRencanaStrategisController::class);
+Route::post('rencana_strategis/{id}/toggle', [AdminRencanaStrategisController::class, 'toggle'])->name('rencana_strategis.toggle');
 Route::resource('rencana_strategis_lembaga', AdminRencanaStrategisLembagaController::class);
+Route::post('rencana_strategis_lembaga/{id}/toggle', [AdminRencanaStrategisLembagaController::class, 'toggle'])->name('rencana_strategis_lembaga.toggle');
 Route::resource('rencana_operasional', AdminRencanaOperasionalController::class);
+Route::post('rencana_operasional/{id}/toggle', [AdminRencanaOperasionalController::class, 'toggle'])->name('rencana_operasional.toggle');
 Route::resource('statua_ortakers', AdminStatuaOrtakerController::class);
 Route::post('/statua-ortaker/upload-image', [AdminStatuaOrtakerController::class, 'uploadImage'])->name('statua_ortaker_images');
 });
@@ -278,6 +326,15 @@ Route::resource('dokumen_spmi', AdminDokumenSPMIController::class);
 Route::resource('pedoman', AdminPedomanController::class);
 Route::resource('standar', AdminStandarController::class);
 Route::resource('sop', AdminSopController::class);
+Route::post('sop/{id}/toggle', [AdminRencanaOperasionalController::class, 'toggle'])->name('sop.toggle');
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+Route::resource('sistem_informasi_mutu', AdminSistemInformasiMutuController::class);
+});
+
+Route::prefix('admin')->group(function () {
+    Route::resource('slider', SliderController::class);
 });
 
 // //kategori personalia
@@ -306,16 +363,17 @@ Route::post('/kategori_struktur_organisasi-delete', [App\Http\Controllers\Katego
 
 // STRUKTUR ORGANISASI
 // ADMIN STRUKTUR ORGANISASI
-Route::get('/admin_struktur_organisasi', [StrukturOrganisasiAdminController::class, 'index'])->name('admin_struktur_organisasi.index');
-Route::post('/admin_struktur_organisasi', [StrukturOrganisasiAdminController::class, 'upload'])->name('admin_struktur_organisasi.upload');
+Route::prefix('admin')->group(function () {
+// 🔹 CRUD DESKRIPSI (resource)
+Route::resource('struktur-organisasi', StrukturOrganisasiAdminController::class)->names('admin_struktur_organisasi');
+Route::post('struktur-organisasi/upload', [StrukturOrganisasiAdminController::class, 'upload'])->name('admin_struktur_organisasi.upload');
+});
 
 // visi misi tujuan
 Route::resource('visi_misi_tujuan', VisiDanMisiAdminController::class);
 Route::get('/visi_misi_tujuan-get_data', [VisiDanMisiAdminController::class, 'getData'])->name('visi_misi_tujuan.getData');
 Route::post('/visi_misi_tujuan-updated', [VisiDanMisiAdminController::class, 'updated'])->name('visi_misi_tujuan.updated');
 Route::post('/visi_misi_tujuan-delete', [VisiDanMisiAdminController::class, 'delete'])->name('visi_misi_tujuan.delete');
-
-
 
 // kategori divisi
 Route::resource('kategori_divisi', KategoriDivisiController::class);
@@ -363,6 +421,7 @@ Route::post('/sub_kategori_dokumen-delete', [App\Http\Controllers\SubKategoriDok
 Route::resource('juduL_gambar_isi', JudulGambarIsiController::class);
 Route::get('/juduL_gambar_isi-get_data', [App\Http\Controllers\JudulGambarIsiController::class, 'getData'])->name('juduL_gambar_isi.getData');
 Route::post('/juduL_gambar_isi-updated', [App\Http\Controllers\JudulGambarIsiController::class, 'updated'])->name('juduL_gambar_isi.updated');
+Route::post('/juduL_gambar_isi-delete', [JudulGambarIsiController::class, 'delete'])->name('juduL_gambar_isi.delete');
 Route::resource('setting_halaman_utama', SettingHalamanUtamaController::class);
 
 Route::post('/setting_halaman_utama-setting_footer', [App\Http\Controllers\SettingHalamanUtamaController::class, 'setting_footer'])->name('setting_halaman_utama.setting_footer');

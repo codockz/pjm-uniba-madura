@@ -80,16 +80,7 @@
                             </thead>
                             <tbody id="add_new">
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kategori Media</th>
-                                    <th>Judul</th>
-                                    <th>isi</th>
-                                    <th>Gambar</th>
-                                    <th>Action</th>
-                                </tr>
-                            </tfoot>
+                            
                         </table>
                     </div>
                 </div>
@@ -343,7 +334,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var newTable = $('#example1').DataTable({
+             newTable = $('#example1').DataTable({
                 columnDefs: [{
                         "targets": '_all', // Apply to all columns
                         "orderable": false
@@ -509,12 +500,22 @@
 
 
                     } else if (response.status == 200) {
-                        toastr.success(response.message);
-                        $('#btn_add').prop('disabled', false);
-                        $('#exampleModal').modal('hide');
-                        $("#add_form")[0].reset(); // Fix here
-                        $('#example1').DataTable().ajax.reload();
-                    }
+    toastr.success(response.message);
+    $('#btn_add').prop('disabled', false);
+
+    // 🔥 FORCE CLOSE MODAL (WAJIB DI PROJECT KAMU)
+    $('#exampleModal').removeClass('show').hide();
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
+    $('body').css('padding-right', '');
+
+    $("#add_form")[0].reset();
+
+    // 🔥 reload table
+    setTimeout(function(){
+        newTable.ajax.reload(null, false);
+    }, 300);
+}
                 },
             });
         });

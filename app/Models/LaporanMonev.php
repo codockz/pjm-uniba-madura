@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class LaporanMonev extends Model
 {
-    protected $fillable = ['judul', 'tahun', 'file'];
-    protected $table = 'laporan_monevs';
+    use HasFactory;
+
+    protected $table = 'laporan_monev';
+
+    protected $fillable = [
+        'judul',
+        'tahun',
+        'file',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'tahun' => 'integer',
+    ];
 }

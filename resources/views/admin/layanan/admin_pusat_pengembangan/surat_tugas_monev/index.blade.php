@@ -1,173 +1,258 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card shadow-sm">
 
-        <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="container-fluid">
 
-            <h3 class="card-title">
-                <i class="fas fa-folder-open text-primary"></i> Surat Tugas Monev
-            </h3>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Surat Tugas Monev</h3>
 
-            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpload">
-                <i class="fas fa-upload"></i> Upload Dokumen
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreate">
+                + Tambah Data
             </button>
-
         </div>
 
-        <div class="card-body">
+        <div class="card shadow-sm">
+            <div class="card-body">
 
-            @if ($data->count() > 0)
-                <div class="row">
+                {{-- 🔽 FILTER --}}
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
 
-                    @foreach ($data as $item)
-                        <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted small d-flex align-items-center gap-1 me-1">
+                            <i class="fas fa-filter"></i>
+                            Filter
+                        </span>
 
-                            <div class="card shadow-sm border-0 h-100">
-
-                                <div class="card-body text-center">
-
-                                    <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
-
-                                    <h6 class="font-weight-bold">
-                                        {{ $item->judul }}
-                                    </h6>
-
-                                    <small class="text-muted">
-                                        Tahun: {{ $item->tahun }}
-                                    </small>
-
-                                    <br>
-
-                                    <small class="text-muted">
-                                        Upload: {{ $item->created_at->format('d M Y') }}
-                                    </small>
-
-                                    <hr>
-
-                                    <button class="btn btn-info btn-sm mb-2" data-toggle="collapse"
-                                        data-target="#preview{{ $item->id }}">
-
-                                        <i class="fas fa-eye"></i> Preview
-
-                                    </button>
-
-                                    <br>
-
-                                    <a href="{{ asset('storage/' . $item->file) }}" class="btn btn-success btn-sm"
-                                        target="_blank">
-
-                                        <i class="fas fa-download"></i>
-
-                                    </a>
-
-                                    <form action="{{ route('surat_tugas_monev.destroy', $item->id) }}" method="POST"
-                                        style="display:inline">
-
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Hapus dokumen ini?')">
-
-                                            <i class="fas fa-trash"></i>
-
-                                        </button>
-
-                                    </form>
-
-                                </div>
-
-                                <div id="preview{{ $item->id }}" class="collapse">
-
-                                    <iframe src="{{ asset('storage/' . $item->file) }}" width="100%" height="400px">
-                                    </iframe>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    @endforeach
+                        <select id="filterTahun" class="form-select form-select-sm filter-select">
+                            <option value="">Semua</option>
+                            @foreach ($data->pluck('tahun')->unique() as $thn)
+                                <option value="{{ $thn }}">{{ $thn }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                 </div>
 
-                <div class="mt-3">
-                    {{ $data->links() }}
-                </div>
-            @else
-                <div class="alert alert-info text-center">
-                    Belum ada dokumen Surat Tugas Monev
-                </div>
-            @endif
+                @if ($data->count() > 0)
+                    <div class="table-responsive">
+                        <table id="tableSuratTugas" class="table table-bordered table-hover align-middle text-center">
 
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th>Judul Dokumen</th>
+                                    <th>Tahun</th>
+                                    <th>File</th>
+                                    <th>Status</th>
+                                    <th width="20%">Aksi</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($data as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+
+                                        <td class="text-start">{{ $item->judul }}</td>
+
+                                        <td>{{ $item->tahun ?? '-' }}</td>
+
+                                        <td>
+                                            @if ($item->file)
+                                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank">
+                                                    Download
+                                                </a>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+
+                                        {{-- STATUS --}}
+                                        <td>
+                                            <span class="badge bg-{{ $item->is_active ? 'success' : 'danger' }}">
+                                                {{ $item->is_active ? 'Aktif' : 'Tidak Aktif' }}
+                                            </span>
+                                        </td>
+
+                                        {{-- AKSI --}}
+                                        <td>
+
+                                            {{-- TOGGLE --}}
+                                            <form action="{{ route('admin.surat_tugas_monev.toggle', $item->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                <button
+                                                    class="btn btn-sm {{ $item->is_active ? 'btn-success' : 'btn-secondary' }}">
+                                                    <i
+                                                        class="fas {{ $item->is_active ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
+                                                </button>
+                                            </form>
+
+                                            {{-- EDIT --}}
+                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $item->id }}">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+
+                                            {{-- DELETE --}}
+                                            <form action="{{ route('admin.surat_tugas_monev.destroy', $item->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
+                @else
+                    <div class="alert alert-info text-center">
+                        Belum ada data Surat Tugas Monev.
+                    </div>
+                @endif
+
+            </div>
         </div>
 
     </div>
 
-
-
-    {{-- MODAL UPLOAD --}}
-
-    <div class="modal fade" id="modalUpload">
-
+    {{-- ================= MODAL CREATE ================= --}}
+    <div class="modal fade" id="modalCreate" tabindex="-1">
         <div class="modal-dialog">
-
             <div class="modal-content">
 
-                <form action="{{ route('surat_tugas_monev.store') }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Surat Tugas Monev</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
+                <form action="{{ route('admin.surat_tugas_monev.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
-                    <div class="modal-header">
-
-                        <h5 class="modal-title">
-                            Upload Surat Tugas Monev
-                        </h5>
-
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span>&times;</span>
-                        </button>
-
-                    </div>
 
                     <div class="modal-body">
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label>Judul Dokumen</label>
                             <input type="text" name="judul" class="form-control" required>
                         </div>
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label>Tahun</label>
-                            <input type="number" name="tahun" class="form-control" required>
+                            <input type="number" name="tahun" class="form-control">
                         </div>
 
-                        <div class="form-group">
-                            <label>Upload File PDF</label>
+                        <div class="mb-3">
+                            <label>Status</label>
+                            <select name="is_active" class="form-control">
+                                <option value="1">Aktif</option>
+                                <option value="0">Tidak Aktif</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>File (PDF)</label>
                             <input type="file" name="file" class="form-control" required>
                         </div>
 
                     </div>
 
                     <div class="modal-footer">
-
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Batal
                         </button>
-
-                        <button type="submit" class="btn btn-primary">
-                            Upload
-                        </button>
-
+                        <button class="btn btn-primary">Simpan</button>
                     </div>
 
                 </form>
 
             </div>
-
         </div>
-
     </div>
+
+    {{-- ================= MODAL EDIT ================= --}}
+    @foreach ($data as $item)
+        <div class="modal fade" id="modalEdit{{ $item->id }}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Data</h5>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form action="{{ route('admin.surat_tugas_monev.update', $item->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label>Judul</label>
+                                <input type="text" name="judul" value="{{ $item->judul }}" class="form-control"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Tahun</label>
+                                <input type="number" name="tahun" value="{{ $item->tahun }}" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Status</label>
+                                <select name="is_active" class="form-control">
+                                    <option value="1" {{ $item->is_active ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ !$item->is_active ? 'selected' : '' }}>Tidak Aktif</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>File</label>
+                                <input type="file" name="file" class="form-control">
+                                @if ($item->file)
+                                    <small>File saat ini: {{ $item->file }}</small>
+                                @endif
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
+                            <button class="btn btn-primary">Update</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    @push('scripts')
+        <script>
+            $(function() {
+                let table = $('#tableSuratTugas').DataTable({
+                    responsive: true,
+                    autoWidth: false,
+                    pageLength: 10,
+                    ordering: false
+                });
+
+                $('#filterTahun').on('change', function() {
+                    table.column(2).search(this.value).draw();
+                });
+            });
+        </script>
+    @endpush
 
 @endsection

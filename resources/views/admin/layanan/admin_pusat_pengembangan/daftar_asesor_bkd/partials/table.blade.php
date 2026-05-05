@@ -33,23 +33,19 @@
                             </td>
                             <td>
                                 <button type="button" class="btn btn-warning btn-sm mr-1 btn-edit"
-                                    data-id="{{ $item->id }}"
-                                    data-nama="{{ $item->nama_dosen }}"
-                                    data-nira="{{ $item->nira }}"
-                                    data-prodi="{{ $item->program_studi_id }}"
-                                    data-periode="{{ $item->periode }}"
-                                    data-toggle="modal"
+                                    data-id="{{ $item->id }}" data-nama="{{ $item->nama_dosen }}"
+                                    data-nira="{{ $item->nira }}" data-prodi="{{ $item->program_studi_id }}"
+                                    data-periode="{{ $item->periode }}" data-toggle="modal"
                                     data-target="#modalEditAsesor">
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <form action="{{ route('admin.daftar_asesor_bkd.destroy', $item->id) }}"
-                                      method="POST"
-                                      style="display:inline-block;"
-                                      onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                <form action="{{ route('admin.daftar_asesor_bkd.destroy', $item->id) }}" method="POST"
+                                    style="display:inline-block;"
+                                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">
+                                    <button type="button" class="btn btn-danger btn-sm delete-confirm">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

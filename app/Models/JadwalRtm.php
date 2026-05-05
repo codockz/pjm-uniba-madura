@@ -2,10 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class JadwalRtm extends Model
 {
+    use HasFactory;
+
     protected $table = 'jadwal_rtm';
-    protected $fillable = ['judul', 'tahun', 'cover', 'file'];
+
+    protected $fillable = [
+        'judul',
+        'tahun',
+        'file',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'tahun' => 'integer',
+    ];
 }

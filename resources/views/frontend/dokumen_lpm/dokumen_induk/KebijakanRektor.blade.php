@@ -21,7 +21,7 @@
             </thead>
 
             <tbody>
-                @forelse ($data as $item)
+                @foreach ($data as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->tahun }}</td>
@@ -39,21 +39,17 @@
                         {{-- FILE --}}
                         <td>
                             @if ($item->file)
-                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank">
-                                    Download
+                               <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                    class="text-success text-decoration-none fw-semibold">
+                                    <i class="fas fa-download me-1"></i> Download
                                 </a>
                             @else
                                 -
                             @endif
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-center">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                @endforelse
+
+                @endforeach
             </tbody>
         </table>
     </div>

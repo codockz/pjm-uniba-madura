@@ -1,69 +1,122 @@
 @extends('frontend_layouts.app')
 
 @section('content')
-    <div class="container py-5">
+    <div class="container page-content">
 
-        <div style="margin-top:40px; margin-bottom:40px;">
-            <h3 class="text-center mb-4 fw-bold">
-                Rencana Strategis
-            </h3>
+        <h3 class="mt-4 mb-4 text-center fw-bold">
+            Rencana Strategis
+        </h3>
+
+        {{-- 🔽 FILTER --}}
+        <div class="filter-wrapper">
+
+            <span class="filter-label">
+                <i class="fas fa-filter"></i>
+                Filter
+            </span>
+
+            <select id="filterTahun" class="form-select form-select-sm filter-select">
+                <option value="">Semua</option>
+                @foreach ($listTahun as $thn)
+                    <option value="{{ $thn }}">{{ $thn }}</option>
+                @endforeach
+            </select>
+
         </div>
 
-        <div class="row">
-            @forelse ($data as $item)
-                <div class="col-12 mb-5">
+        {{-- 📋 TABEL --}}
+        <table id="tableRenstra" class="table table-bordered table-striped">
 
-                    <div class="card border-0 shadow-sm rounded-3">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th>Judul Dokumen</th>
+                    <th>Lampiran</th>
+                </tr>
+            </thead>
 
-                        {{-- HEADER --}}
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <tbody>
 
-                                {{-- KIRI --}}
-                                <div>
-                                    <h5 class="fw-bold mb-1 text-dark">
-                                        {{ $item->judul }}
-                                    </h5>
+                @forelse ($data as $item)
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
 
-                                    <small class="text-muted">
-                                        Periode {{ $item->tahun_mulai }} - {{ $item->tahun_berakhir }}
-                                    </small>
-                                </div>
+                        {{-- JUDUL + TAHUN --}}
+                        <td>
+                            {{ $item->judul }}
+                            @if ($item->tahun)
+                                ({{ $item->tahun }})
+                            @endif
+                        </td>
 
-                                {{-- KANAN --}}
-                                <div class="mt-2 mt-md-0">
-                                    <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
-                                        class="btn btn-success btn-sm me-2">
-                                        <i class="fa fa-expand"></i> Fullscreen
-                                    </a>
+                        {{-- DOWNLOAD --}}
+                        <td class="text-center">
+                            @if ($item->file)
+                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                    class="text-success text-decoration-none fw-semibold">
+                                    <i class="fas fa-download me-1"></i> Download
+                                </a>
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
 
-                                    <a href="{{ asset('storage/' . $item->file) }}" download class="btn btn-primary btn-sm">
-                                        <i class="fa fa-download"></i> Download
-                                    </a>
-                                </div>
+                @empty
+                    <tr>
+                        <td></td>
+                        <td class="text-center">Data tidak ditemukan</td>
+                        <td></td>
+                    </tr>
+                @endforelse
 
-                            </div>
-                        </div>
+            </tbody>
 
-                        {{-- PDF VIEWER --}}
-                        <div class="px-3 pb-3">
-                            <iframe src="{{ asset('storage/' . $item->file) }}" width="100%" height="600px"
-                                style="border-radius:8px; border:none;">
-                            </iframe>
-                        </div>
-
-                    </div>
-
-                </div>
-            @empty
-                <div class="col-12">
-                    <div class="alert alert-info text-center">
-                        Belum ada data Rencana Strategis.
-                    </div>
-                </div>
-            @endforelse
-        </div>
+        </table>
 
     </div>
 @endsection
 
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+
+            let table = $('#tableRenstra').DataTable({});
+
+            $('#filterTahun').on('change', function() {
+
+                let tahun = $(this).val();
+
+                loadData({
+                    url: "/rencana-strategis?tahun=" + tahun,
+                    table: table,
+                    columns: [
+
+                        // No
+                        (item, index) => index + 1,
+
+                        // Judul
+                        (item) => {
+                            let judul = item.judul;
+                            if (item.tahun) {
+                                judul += ` (${item.tahun})`;
+                            }
+                            return judul;
+                        },
+
+                        // Download
+                        (item) => {
+                             return item.file ?
+    `<a href="/storage/${item.file}" target="_blank"
+        class="download-link">
+        <i class="fas fa-download me-1"></i> Download
+    </a>` :
+    '-';
+                        }
+                    ]
+                });
+            });
+
+        });
+    </script>
+@endpush

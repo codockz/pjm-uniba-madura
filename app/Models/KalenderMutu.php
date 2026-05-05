@@ -10,8 +10,14 @@ class KalenderMutu extends Model
     protected $table = 'kalender_mutu';
 
     protected $fillable = [
-        'tahun',
         'judul',
-        'file'
+        'tahun',
+        'file',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'tahun' => 'integer',
     ];
 }

@@ -9,78 +9,100 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminRencanaStrategisController extends Controller
 {
+    // 🔹 TAMPIL DATA
     public function index()
     {
-        $data = RencanaStrategis::latest()->get();
+        $data = RencanaStrategis::orderBy('tahun', 'desc')
+            ->latest()
+            ->paginate(5);
 
         return view('admin.dokumen_lpm.dokumen_induk.rencana_strategis.index', compact('data'));
     }
 
+    // 🔹 FORM CREATE
+    public function create()
+    {
+        return view('admin.dokumen_lpm.dokumen_induk.rencana_strategis.create');
+    }
+
+    // 🔹 SIMPAN DATA
     public function store(Request $request)
     {
         $request->validate([
             'judul' => 'required',
-            'tahun_mulai' => 'required|digits:4',
-            'tahun_berakhir' => 'required|digits:4',
+            'tahun' => 'nullable|integer',
             'file' => 'required|mimes:pdf|max:2048',
+            'is_active' => 'required',
         ]);
 
-        // upload file
-        $file = $request->file('file')->store('rencana_strategis', 'public');
+        $filePath = $request->file('file')->store('rencana_strategis', 'public');
 
         RencanaStrategis::create([
             'judul' => $request->judul,
-            'tahun_mulai' => $request->tahun_mulai,
-            'tahun_berakhir' => $request->tahun_berakhir,
-            'file' => $file,
+            'tahun' => $request->tahun,
+            'file' => $filePath,
+            'is_active' => $request->is_active,
         ]);
 
-        return back()->with('success', 'Berhasil ditambahkan');
+        return redirect()->route('admin.rencana_strategis.index')
+            ->with('success', 'Data berhasil ditambahkan');
     }
 
+    // 🔹 UPDATE DATA
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'judul' => 'required',
-            'tahun_mulai' => 'required|digits:4',
-            'tahun_berakhir' => 'required|digits:4',
-            'file' => 'nullable|mimes:pdf|max:2048',
-        ]);
-
         $data = RencanaStrategis::findOrFail($id);
 
-        // jika upload file baru
+        $request->validate([
+            'judul' => 'required',
+            'tahun' => 'nullable|integer',
+            'file' => 'nullable|mimes:pdf|max:2048',
+            'is_active' => 'required',
+        ]);
+
         if ($request->hasFile('file')) {
-            // hapus file lama
+
             if ($data->file && Storage::disk('public')->exists($data->file)) {
                 Storage::disk('public')->delete($data->file);
             }
 
-            // upload file baru
-            $data->file = $request->file('file')->store('rencana_strategis', 'public');
+            $filePath = $request->file('file')->store('rencana_strategis', 'public');
+            $data->file = $filePath;
         }
 
-        // update data
         $data->update([
             'judul' => $request->judul,
-            'tahun_mulai' => $request->tahun_mulai,
-            'tahun_berakhir' => $request->tahun_berakhir,
+            'tahun' => $request->tahun,
+            'is_active' => $request->is_active,
         ]);
 
-        return back()->with('success', 'Data berhasil diupdate');
+        return redirect()->route('admin.rencana_strategis.index')
+            ->with('success', 'Data berhasil diupdate');
     }
 
+    // 🔹 HAPUS DATA
     public function destroy($id)
     {
         $data = RencanaStrategis::findOrFail($id);
 
-        // hapus file dari storage
         if ($data->file && Storage::disk('public')->exists($data->file)) {
             Storage::disk('public')->delete($data->file);
         }
 
         $data->delete();
 
-        return back()->with('success', 'Berhasil dihapus');
+        return redirect()->route('admin.rencana_strategis.index')
+            ->with('success', 'Data berhasil dihapus');
+    }
+
+    // 🔥 TOGGLE STATUS
+    public function toggle($id)
+    {
+        $data = RencanaStrategis::findOrFail($id);
+
+        $data->is_active = !$data->is_active;
+        $data->save();
+
+        return back()->with('success', 'Status berhasil diubah');
     }
 }

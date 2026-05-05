@@ -3,26 +3,119 @@
 @section('content')
     <div class="container page-content">
 
-        
+        <h3 class="mt-4 mb-4 text-center fw-bold">
+            Kalender Akademik
+        </h3>
 
-        @if ($data)
-            <a href="{{ asset('storage/' . $data->file) }}" target="_blank" class="btn btn-primary mb-3">
-                View Fullscreen
-            </a>
+        <div class="filter-wrapper">
 
-            <div class="card shadow-sm">
-                <div class="card-body">
+            <span class="filter-label">
+                <i class="fas fa-filter"></i>
+                Filter
+            </span>
 
-                    <iframe src="{{ asset('storage/' . $data->file) }}" width="100%" height="600px">
-                    </iframe>
+            <select id="filterTahun" class="form-select form-select-sm filter-select">
+                <option value="">Semua</option>
+                @foreach ($listTahun as $thn)
+                    <option value="{{ $thn }}">{{ $thn }}</option>
+                @endforeach
+            </select>
 
-                </div>
-            </div>
-        @else
-            <div class="alert alert-info text-center mt-4">
-                📄 Kalender Akademik tahun {{ $tahun }} belum tersedia
-            </div>
-        @endif
+        </div>
+
+        {{-- 📋 TABEL --}}
+        <table id="tableAkademikFrontend" class="table table-bordered table-striped">
+
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th>Judul Kalender</th>
+                    <th>Lampiran</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @forelse ($data as $item)
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+
+                        <td>
+                            {{ $item->judul }}
+                            @if ($item->tahun)
+                                ({{ $item->tahun }})
+                            @endif
+                        </td>
+
+                        <td class="text-center">
+                            @if ($item->file)
+                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                    class="text-success text-decoration-none fw-semibold">
+                                    <i class="fas fa-download me-1"></i> Download
+                                </a>
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+
+                @empty
+                    <tr>
+                        <td></td>
+                        <td class="text-center">Data tidak ditemukan</td>
+                        <td></td>
+                    </tr>
+                @endforelse
+
+            </tbody>
+
+        </table>
 
     </div>
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+
+    let table = $('#tableAkademikFrontend').DataTable({});
+
+    $('#filterTahun').on('change', function() {
+
+        let tahun = $(this).val();
+
+        loadData({
+            url: "/kalender-akademik?tahun=" + tahun,
+            table: table,
+            columns: [
+
+                // No
+                (item, index) => index + 1,
+
+                // Judul
+                (item) => {
+                    let judul = item.judul;
+                    if (item.tahun) {
+                        judul += ` (${item.tahun})`;
+                    }
+                    return judul;
+                },
+
+                // Download
+                (item) => {
+                    return item.file ?
+    `<a href="/storage/${item.file}" target="_blank"
+        class="download-link">
+        <i class="fas fa-download me-1"></i> Download
+    </a>` :
+    '-';
+                }
+
+            ]
+        });
+
+    });
+
+});
+</script>
+@endpush

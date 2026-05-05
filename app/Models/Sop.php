@@ -7,5 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sop extends Model
 {
-    protected $fillable = ['judul', 'file', 'deskripsi', 'tahun'];
+    protected $table = 'sop';
+    protected $fillable = [
+        'judul',
+        'tahun',
+        'file',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'tahun' => 'integer',
+    ];
 }

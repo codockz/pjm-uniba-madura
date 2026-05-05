@@ -13,7 +13,7 @@
     <div class="content_left features">
         @if($data->isEmpty())
         @else
-        <h1 style="margin-bottom: 20px;">rofil</h1>
+        <h1 style="margin-bottom: 20px;">Profil</h1>
         @endif
         <ul>
             @forelse ($data as $item)

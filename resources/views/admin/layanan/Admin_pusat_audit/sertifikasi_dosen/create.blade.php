@@ -7,7 +7,7 @@
                 <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form action="{{ route('sertifikasi_dosen.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.sertifikasi_dosen.store') }}" method="POST" enctype="multipart/form-data">
 
                 @csrf
 

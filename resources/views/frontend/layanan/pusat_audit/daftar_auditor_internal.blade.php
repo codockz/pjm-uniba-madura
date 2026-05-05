@@ -19,36 +19,30 @@
 
             <tbody>
 
-                @forelse ($data as $item)
+                @foreach ($data as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->nama }}</td>
                         <td>{{ $item->fakultas }}</td>
                     </tr>
+                @endforeach
 
-                @empty
+                
 
-                    <tr>
-                        <td colspan="3" class="text-center">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                @endforelse
+                </tbody>
 
-            </tbody>
+            </table>
 
-        </table>
-
-    </div>
-@endsection
+        </div>
+    @endsection
 
 
-@push('scripts')
-    <script>
-        $(document).ready(function() {
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
 
-            initFrontendDataTable('#tableAuditor');
+                initFrontendDataTable('#tableAuditor');
 
-        });
-    </script>
-@endpush
+            });
+        </script>
+    @endpush

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SettingWebProfile;
 use App\Models\User;
 
+
 class HomeController extends Controller
 {
     /**

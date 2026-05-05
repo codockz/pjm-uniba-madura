@@ -45,9 +45,9 @@
                                         </td>
 
                                         <td>
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#modalEdit{{ $item->id }}">
-                                                Edit
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $item->id }}" title="Edit Data">
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
                                             <form action="{{ route('admin.dokumen_spmi.destroy', $item->id) }}"
@@ -55,9 +55,8 @@
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                    Hapus
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -115,7 +114,9 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Batal
+                        </button>
                         <button class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
@@ -166,7 +167,9 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
                             <button class="btn btn-primary">Update</button>
                         </div>
 

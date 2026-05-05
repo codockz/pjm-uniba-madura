@@ -87,7 +87,7 @@
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" id="btn_add" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
                 </div>
                 </form>
@@ -178,12 +178,24 @@
 
 
                     } else if (response.status == 200) {
-                        toastr.success(response.message);
-                        $('#btn_add').prop('disabled', false);
-                        $('#exampleModal').modal('hide');
-                        $("#add_form")[0].reset(); // Fix here
-                        $('#example1').DataTable().ajax.reload();
-                    }
+    toastr.success(response.message);
+    $('#btn_add').prop('disabled', false);
+
+    // 🔥 FORCE CLOSE (PALING STABIL)
+$('#exampleModal').removeClass('show');
+$('#exampleModal').css('display', 'none');
+
+$('.modal-backdrop').remove();
+$('body').removeClass('modal-open');
+$('body').css('padding-right', '');
+
+    // 🔥 TAMBAHKAN INI
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
+
+    $("#add_form")[0].reset();
+    $('#example1').DataTable().ajax.reload();
+}
                 },
             });
         });

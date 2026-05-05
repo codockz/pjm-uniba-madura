@@ -281,18 +281,12 @@
 ================================ */
 
         /* Dropdown Submenu Styling */
-        .dropdown-submenu {
-            position: relative;
-        }
 
-        .dropdown-submenu>.dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-top: -6px;
-            margin-left: -1px;
-            border-radius: 0 6px 6px 6px;
-        }
 
+
+        .dropdown:hover > .dropdown-menu {
+    display: block;
+}
         .dropdown-submenu:hover>.dropdown-menu {
             display: block;
         }
@@ -354,23 +348,39 @@
             margin-top: 3px;
         }
 
-        /* === DROPDOWN SUBMENU === */
-        .dropdown-submenu {
-            position: relative;
-        }
+       .dropdown-submenu {
+    position: relative;
+}
 
-        .dropdown-submenu>.dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-top: -1px;
-            border-radius: 0;
-        }
 
-        /* tampil saat hover */
-        .dropdown-submenu:hover>.dropdown-menu {
-            display: block;
-        }
+.dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    transform: translateX(-2px);
+}
+/* 🔥 jembatan hover */
+.dropdown-submenu > .dropdown-menu::before {
+    content: "";
+    position: absolute;
+    left: -15px;
+    top: 0;
+    width: 15px;
+    height: 100%;
+}
 
+
+
+
+.dropdown-menu li {
+    position: relative;
+}
+.dropdown-menu {
+    padding: 8px 0;
+}
+
+.dropdown-menu > li > a {
+    padding: 10px 20px;
+}
 
 
         /* warna hover */
@@ -454,10 +464,14 @@
 
 
 
+
+
+
+
         /* ===== STYLE DATATABLES PJM ===== */
 
         /* table.dataTable thead th {
-            background: linear-gradient(45deg, #0d6efd, #0b5ed7) !important;
+            background: linear-gradient(45deg, #006634, #004d26) !important;
             color: #fff !important;
             font-weight: 600;
         } */
@@ -504,10 +518,20 @@
         }
 
         .table thead th {
-            background: linear-gradient(45deg, #0d6efd, #0b5ed7);
+            background: linear-gradient(45deg, #22924f, #02ac5a);
             color: #fff;
             font-weight: 600;
             text-align: center;
+        }
+
+
+        /* Header tabel center, isi tabel rata kiri */
+        table.dataTable thead th {
+            text-align: center !important;
+        }
+
+        table.dataTable tbody td {
+            text-align: left !important;
         }
 
         .table tbody td {
@@ -664,7 +688,534 @@
             justify-content: center;
             align-items: flex-start;
         }
+
+        /* Baris datatable */
+        .dataTables_wrapper .dataTables_length {
+            float: left;
+        }
+
+        .dataTables_wrapper .dataTables_filter {
+            float: right;
+        }
+
+        /* Biar sejajar */
+        .dataTables_length label,
+        .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+        }
+
+        /* Search */
+        .dataTables_filter input {
+            width: 200px;
+        }
+
+        /* Dropdown filter */
+        #filterTahun {
+            height: 31px;
+        }
+
+        .filter-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-icon {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .filter-select {
+            width: 130px;
+            height: 31px;
+            padding-left: 10px;
+            padding: 2px 6px;
+        }
+
+        .filter-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-select {
+            width: 100px;
+            height: 20px;
+            border-radius: 6px;
+        }
+
+        .filter-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .filter-select {
+            width: 100px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .filter-select:hover {
+            border-color: #0d6efd;
+        }
+
+        .page-content h3 {
+            margin-bottom: 40px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+        }
+
+        .arsip-scroll {
+            max-height: 200px;
+            /* tinggi box */
+            overflow-y: auto;
+            /* scroll aktif */
+            padding-right: 5px;
+        }
+
+        /* optional biar lebih smooth */
+        .arsip-scroll li {
+            margin-bottom: 6px;
+        }
+
+        /* scrollbar custom (biar lebih cakep) */
+        .arsip-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .arsip-scroll::-webkit-scrollbar-thumb {
+            background-color: #877272;
+            border-radius: 10px;
+        }
+
+        .arsip-scroll {
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #e9d7d7;
+            border-radius: 6px;
+            background: #ffffff;
+        }
+
+        /* ===== INFO TERBARU FIX ===== */
+        .info-terbaru {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+            margin-top: 10px;
+        }
+
+        .info-card {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 12px 14px !important;
+            background: #ffffff !important;
+            border-radius: 10px !important;
+            text-decoration: none !important;
+            border: 1px solid #e5e5e5 !important;
+            transition: all 0.3s ease !important;
+            color: inherit !important;
+        }
+
+        .info-card:hover {
+            background: #f5f9ff !important;
+            border-color: #0d6efd !important;
+            transform: translateX(5px);
+        }
+
+        .info-text {
+            flex: 1;
+        }
+
+        .info-title {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+            margin-bottom: 4px;
+        }
+
+        .info-date {
+            font-size: 12px !important;
+            color: #c09999 !important;
+        }
+
+        .info-arrow {
+            font-size: 16px !important;
+            color: #000000 !important;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-card:hover .info-arrow {
+            transform: translateX(5px);
+        }
+
+        .info-card {
+            border-left: 4px solid #0d6efd;
+        }
+
+        .mainContent {
+            padding-bottom: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .brandSection {
+            margin-top: 0 !important;
+            padding-top: 10px !important;
+        }
+        .aboutImage img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.news-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.news-title {
+    min-height: 60px;
+}
+
+.news-title a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.aboutImage img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.news-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.news-title {
+    min-height: 60px;
+}
+.col-sm-4.d-flex {
+    display: flex;
+}
+
+.news-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.aboutImage img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+.aboutImage {
+    width: 100%;
+}
+.row {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.slider-wrapper {
+    position: relative;
+}
+
+.slider-img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+/* ===== SLIDER - CLEAN VERSION ===== */
+
+/* Fix gap navbar & slider */
+main {
+    margin: 0 !important;
+    padding: 0 !important;
+
+}
+
+#mainSlider,
+.carousel,
+.carousel-inner,
+.carousel-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0 !important;
+    height: 60vh;
+}
+
+.carousel-item {
+    overflow: hidden;
+}
+
+/* Wrapper gambar */
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Gambar slider */
+.slider-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    vertical-align: top;
+    margin: 0;
+    padding: 0;
+}
+
+/* Overlay gradasi */
+.slider-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,0.65), rgba(0,0,0,0.1));
+}
+
+/* Konten teks */
+.slider-content {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    transform: translateY(-50%);
+    max-width: 520px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 28px 32px;
+    border-radius: 10px;
+    animation: fadeInUp 0.8s ease;
+    line-height: 1.5;
+}
+
+.slider-content h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.slider-content p {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 18px;
+    line-height: 1.6;
+}
+
+.slider-content .btn {
+    font-size: 14px;
+    padding: 8px 22px;
+    border-radius: 6px;
+}
+
+/* Animasi */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(calc(-50% + 20px)); }
+    to   { opacity: 1; transform: translateY(-50%); }
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    #mainSlider,
+    .carousel-inner,
+    .carousel-item {
+        height: 50vw;
+    }
+
+    .slider-content {
+        left: 5%;
+        right: 5%;
+        max-width: 90%;
+        padding: 16px 20px;
+    }
+
+    .slider-content h2 {
+        font-size: 22px;
+    }
+
+    .slider-content p {
+        font-size: 13px;
+    }
+}
+/* ===== FIX TOMBOL PREV/NEXT - POSISI KANAN KIRI ===== */
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 10 !important;
+    width: 45px !important;
+    height: 45px !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid rgba(255,255,255,0.3) !important;
+    transition: background 0.3s ease !important;
+}
+
+.carousel-control-prev {
+    left: 20px !important;
+}
+
+.carousel-control-next {
+    right: 20px !important;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background: rgba(0, 0, 0, 0.75) !important;
+    border-color: rgba(255,255,255,0.6) !important;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Pastikan #mainSlider position relative */
+#mainSlider {
+    position: relative !important;
+}
+.carousel-control.left,
+.carousel-control.right {
+    background: none;
+}
+
+.carousel-control .glyphicon {
+    font-size: 30px;
+    color: #fff;
+}
+.carousel-indicators {
+    bottom: 15px;
+}
+
+.carousel-indicators li {
+    background-color: #ccc;
+    border: none;
+}
+
+.carousel-indicators .active {
+    background-color: #f0ad4e;
+}
+.slider-content {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+
+    transform: translateY(-50%);
+
+    width: 600px; /* 🔥 lebih lebar kayak contoh */
+}
+.slider-content .btn {
+    transition: 0.3s;
+}
+
+.slider-content .btn:hover {
+    transform: translateY(-2px);
+}
+/* PANAH KIRI */
+.carousel-control.left {
+    left: 0;
+    width: 5%;
+}
+
+/* PANAH KANAN */
+.carousel-control.right {
+    right: 0;
+    width: 5%;
+}
+
+/* ICON PANAH */
+.carousel-control .glyphicon {
+    font-size: 30px;
+}
+
+/* HILANGKAN BACKGROUND HITAM */
+.carousel-control {
+    background: none !important;
+}
+.slider-content-inner {
+    transform: translateY(-10px); /* naik sedikit */
+}
+.slider-content-inner h2 {
+    font-size: 42px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.slider-content-inner p {
+    font-size: 16px;
+    color: #ddd;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+.slider-content {
+    top: 35%; /* sebelumnya 50% */
+    transform: translateY(-50%);
+}
+.slider-content-inner {
+    min-height: 180px; /* 🔥 samakan tinggi */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.slider-content-inner p {
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* maksimal 2 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.empty-pengumuman {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    text-align: center;
+}
+
     </style>
+
 
 
 </head>
@@ -676,7 +1227,7 @@
 
         <main>
             @yield('content')
-    </main>
+        </main>
 
         @include('frontend_layouts.footer')
     </div>
@@ -685,38 +1236,103 @@
     @include('frontend_layouts.script_js')
     @stack('scripts')
     <script>
-        function initFrontendDataTable(tableID) {
-            $(tableID).DataTable({
-                pageLength: 10,
-                lengthMenu: [10, 25, 50, 100],
-                autoWidth: false,
-                responsive: true,
+        function initFrontendDataTable(tableID, options = {}) {
 
-                language: {
-                    lengthMenu: "Tampilkan _MENU_ entri",
-                    search: "Cari:",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                    zeroRecords: "Data tidak ditemukan",
-                    paginate: {
-                        previous: "←",
-                        next: "→"
-                    }
+    // 🔥 CEGAH DOUBLE INIT
+    if ($.fn.DataTable.isDataTable(tableID)) {
+        return $(tableID).DataTable();
+    }
+
+    let defaultOptions = {
+        pageLength: 10,
+        lengthMenu: [10, 25, 50, 100],
+        autoWidth: false,
+        responsive: true,
+
+        language: {
+            lengthMenu: "Tampilkan _MENU_ entri",
+            search: "Cari:",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            zeroRecords: "Data tidak ditemukan",
+            emptyTable: "Data tidak ditemukan",
+            paginate: {
+                previous: "←",
+                next: "→"
+            }
+        },
+
+        dom: '<"row mb-3"' +
+            '<"col-md-6"l>' +
+            '<"col-md-6 text-end"f>' +
+            '>' +
+            'rt' +
+            '<"row mt-3"' +
+            '<"col-md-6"i>' +
+            '<"col-md-6 text-end"p>' +
+            '>'
+    };
+
+    let finalOptions = {
+        ...defaultOptions,
+        ...options
+    };
+
+    return $(tableID).DataTable(finalOptions);
+}
+
+        // 🔥 INI HARUS DI LUAR
+        function loadData({
+            url,
+            table,
+            columns,
+            emptyMessage = 'Data tidak ditemukan'
+        }) {
+
+            $.ajax({
+                url: url,
+                type: "GET",
+
+                beforeSend: function() {
+                    table.clear();
+                    let colCount = columns.length;
+
+let loadingRow = Array(colCount).fill('');
+loadingRow[Math.floor(colCount / 2)] = '<center>Memuat data...</center>';
+
+table.row.add(loadingRow);
+                    table.draw();
                 },
 
-                dom: '<"row mb-3"' +
-                    '<"col-md-6"l>' +
-                    '<"col-md-6 text-end"f>' +
-                    '>' +
-                    'rt' +
-                    '<"row mt-3"' +
-                    '<"col-md-6"i>' +
-                    '<"col-md-6 text-end"p>' +
-                    '>'
+                success: function(response) {
+
+                    table.clear();
+
+                    if (response.length > 0) {
+
+                        response.forEach(function(item, index) {
+
+                            let row = [];
+
+                            columns.forEach(function(col) {
+                                row.push(col(item, index));
+                            });
+
+                            table.row.add(row);
+                        });
+
+                    } else {
+                        let emptyRow = Array(columns.length).fill('');
+                        emptyRow[Math.floor(columns.length / 2)] = emptyMessage;
+                        table.row.add(emptyRow);
+                    }
+
+                    table.draw();
+                }
             });
         }
+
+
     </script>
-
-
 </body>
 
 </html>

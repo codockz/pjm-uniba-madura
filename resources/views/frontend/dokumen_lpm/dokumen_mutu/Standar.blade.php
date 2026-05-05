@@ -21,7 +21,7 @@
 
             <tbody>
 
-                @forelse ($data as $item)
+                @foreach ($data as $item)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $item->judul }}</td>
@@ -29,8 +29,9 @@
                         <td class="text-center">{{ $item->revisi }}</td>
                         <td class="text-center">
                             @if ($item->file)
-                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank">
-                                    Download
+                               <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                    class="text-success text-decoration-none fw-semibold">
+                                    <i class="fas fa-download me-1"></i> Download
                                 </a>
                             @else
                                 -
@@ -38,13 +39,8 @@
                         </td>
                     </tr>
 
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                @endforelse
+
+                @endforeach
 
             </tbody>
 
@@ -56,7 +52,7 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            initFrontendDataTable('#tableStandar'); // 🔥 ganti ini
+            initFrontendDataTable('#tableStandar'); 
         });
     </script>
 @endpush

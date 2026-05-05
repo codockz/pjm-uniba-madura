@@ -211,7 +211,13 @@
                     } else if (response.status == 200) {
                         toastr.success(response.message);
                         $('#btn_add').prop('disabled', false);
-                        $('#exampleModal').modal('hide');
+                        // 🔥 FORCE CLOSE MODAL (PASTI NUTUP)
+    $('#exampleModal').removeClass('show');
+    $('#exampleModal').css('display', 'none');
+
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
+    $('body').css('padding-right', '');
                         $("#add_form")[0].reset(); // Fix here
                         $('#example1').DataTable().ajax.reload();
                     }

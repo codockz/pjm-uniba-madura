@@ -32,7 +32,7 @@ class JudulGambarIsiController extends Controller
                     })
                     ->addColumn('action', function ($row) {
                         $btn = '<button class="btn btn-warning btn-sm edit-button" data-toggle="modal" data-target="#editModalJudulGambarIsi" data-id="'.$row->id.'"><i class="fa fa-edit"></i></button>
-                                <button class="btn btn-danger btn-sm"  onclick="deleteData('.$row->id.')"><i
+                                <button class="btn btn-danger btn-sm"  onclick="deleteJudulGambarIsi('.$row->id.')"><i
                                     class="fa fa-trash"></i></button>';
 
                         return $btn;
@@ -50,7 +50,7 @@ class JudulGambarIsiController extends Controller
 
     public function getData(Request $request)
     {
-    
+
         $data = JudulGambarIsi::findOrFail($request->data);
         return response()->json([
             'data' =>  $data,
@@ -99,7 +99,7 @@ class JudulGambarIsiController extends Controller
                     'gambar' => $gambar,
                     'kategori' => $request->kategori,
                 ]);
-    
+
                 return response()->json([
                     'status' => 200,
                     'message' => 'data berhasil di tambah',
@@ -111,7 +111,7 @@ class JudulGambarIsiController extends Controller
                 return response()->json(['error' => 'Failed to upload image. Please try again later.'], 500);
             }
 
-           
+
         }
     }
 
@@ -168,7 +168,7 @@ class JudulGambarIsiController extends Controller
             ]);
         }else{
 
-            
+
             $file_gambar = $request->file('gambar');
             if(is_null($request->old_gambar)){
                 $gambar = time() . '-' . $file_gambar->getClientOriginalName();
@@ -204,9 +204,16 @@ class JudulGambarIsiController extends Controller
      * @param  \App\Models\JudulGambarIsi  $JudulGambarIsi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(JudulGambarIsi $JudulGambarIsi)
-    {
-        //
+    public function delete(Request $request)
+{
+    $data = JudulGambarIsi::find($request->ids);
+
+    if ($data) {
+        $data->delete();
     }
+
+    return response()->json([
+        'message' => 'Data berhasil dihapus'
+    ]);
 }
-        
+}

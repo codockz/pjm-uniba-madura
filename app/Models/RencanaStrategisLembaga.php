@@ -7,7 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class RencanaStrategisLembaga extends Model
 {
+    use HasFactory;
+
     protected $table = 'rencana_strategis_lembaga';
 
-    protected $fillable = ['judul', 'file', 'tahun_mulai', 'tahun_selesai'];
+    protected $fillable = [
+        'judul',
+        'tahun',
+        'file',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'tahun' => 'integer',
+    ];
 }

@@ -2,15 +2,43 @@
 
 namespace App\Http\Controllers\frontend\dokumenlpm\DokumenInduk;
 
-use App\Http\Controllers\Controller;
 use App\Models\RencanaOperasional;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\ContentFooter;
+
 
 class RencanaOperasionalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data = RencanaOperasional::latest()->get();
+        $tahun = $request->tahun;
+        $content_footer = ContentFooter::first();
+        $query = RencanaOperasional::where('is_active', 1);
 
-        return view('frontend.dokumen_lpm.dokumen_induk.rencanaoperasional', compact('data'));
+        // 🔽 filter tahun
+        if ($tahun) {
+            $query->where('tahun', $tahun);
+        }
+
+        // 🔽 sorting terbaru
+        $data = $query->orderBy('tahun', 'desc')->latest()->get();
+
+        // 🔥 AJAX
+        if ($request->ajax()) {
+            return response()->json($data);
+        }
+
+        // 🔽 list tahun
+        $listTahun = RencanaOperasional::select('tahun')
+            ->whereNotNull('tahun')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        return view(
+            'frontend.dokumen_lpm.dokumen_induk.rencanaoperasional',
+            compact('data', 'listTahun', 'tahun','content_footer')
+        );
     }
 }

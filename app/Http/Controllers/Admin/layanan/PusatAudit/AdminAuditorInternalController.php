@@ -27,7 +27,7 @@ class AdminAuditorInternalController extends Controller
             'fakultas' => $request->fakultas,
         ]);
 
-        return redirect()->route('auditor_internal.index')->with('success', 'Data Auditor berhasil ditambahkan');
+        return redirect()->route('admin.auditor_internal.index')->with('success', 'Data Auditor berhasil ditambahkan');
     }
 
     public function update(Request $request, $id)
@@ -44,7 +44,7 @@ class AdminAuditorInternalController extends Controller
             'fakultas' => $request->fakultas,
         ]);
 
-        return redirect()->route('auditor_internal.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('admin.auditor_internal.index')->with('success', 'Data berhasil diupdate');
     }
 
     public function destroy($id)
@@ -52,6 +52,6 @@ class AdminAuditorInternalController extends Controller
         $data = AuditorInternal::findOrFail($id);
         $data->delete();
 
-        return redirect()->route('auditor_internal.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('admin.auditor_internal.index')->with('success', 'Data berhasil dihapus');
     }
 }

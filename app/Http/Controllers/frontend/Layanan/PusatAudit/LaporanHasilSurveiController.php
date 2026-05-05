@@ -2,16 +2,35 @@
 
 namespace App\Http\Controllers\frontend\Layanan\PusatAudit;
 
+use App\Models\LaporanHasilSurvei;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\LaporanHasilSurvei;
+use App\Models\ContentFooter;
 
 class LaporanHasilSurveiController extends Controller
 {
-    public function index($tahun)
+    public function index(Request $request)
     {
-        $data = LaporanHasilSurvei::where('tahun', $tahun)->get();
+        $tahun = $request->tahun;
+        $content_footer = ContentFooter::first();
+        $query = LaporanHasilSurvei::where('is_active', 1);
 
-        return view('frontend.layanan.pusat_audit.laporan_hasil_survei', compact('data', 'tahun'));
+        // 🔽 filter tahun
+        if ($tahun) {
+            $query->where('tahun', $tahun);
+        }
+
+        // 🔽 sorting terbaru
+        $data = $query->orderBy('tahun', 'desc')->latest()->get();
+
+        // 🔥 AJAX (buat filter tanpa reload)
+        if ($request->ajax()) {
+            return response()->json($data);
+        }
+
+        // 🔽 list tahun untuk dropdown
+        $listTahun = LaporanHasilSurvei::select('tahun')->whereNotNull('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+
+        return view('frontend.layanan.pusat_audit.laporan_hasil_survei', compact('data', 'listTahun', 'tahun','content_footer'));
     }
 }

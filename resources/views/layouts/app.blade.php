@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.min.css') }}">
 
 
+
     <link rel="stylesheet"
         href="https://adminlte.io/themes/v3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet"
@@ -43,6 +44,7 @@
         href="https://adminlte.io/themes/v3/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     @if (!empty($setting))
         <link rel="icon" type="image/x-icon" href="{{ asset('logo') }}/{{ $setting->logo_web }}" id="myIconLink">
     @else
@@ -139,6 +141,8 @@
     <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
             $('#toggleButton').click(function() {
@@ -179,6 +183,38 @@
             });
         </script>
     @endif
+
+
+    <script>
+        /* delete */
+document.addEventListener('click', function (e) {
+
+    if (e.target.closest('.delete-confirm')) {
+
+        e.preventDefault();
+
+        let button = e.target.closest('.delete-confirm');
+        let form = button.closest('form');
+
+        Swal.fire({
+            title: 'Apakah kamu yakin?',
+            text: "Data akan dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#6c757d'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+
+    }
+
+});
+</script>
 
     <style>
         .card {
@@ -234,6 +270,14 @@
 
         .content-wrapper {
             padding-top: 10px;
+        }
+
+        .btn-sm {
+            margin-right: 3px;
+        }
+
+        .btn-sm {
+            margin-right: 3px;
         }
     </style>
     <script>
@@ -350,37 +394,41 @@
         /* GLOBAL DATATABLE ADMIN */
         function initDataTable(selector) {
 
-            $(selector).DataTable({
+    if ($.fn.DataTable.isDataTable(selector)) {
+        return $(selector).DataTable(); // ambil instance kalau sudah ada
+    }
 
-                responsive: true,
-                autoWidth: false,
-                pageLength: 10,
-                ordering: false,
+    return $(selector).DataTable({
+        responsive: true,
+        autoWidth: false,
+        pageLength: 10,
+        ordering: false,
 
-                language: {
-                    search: "Cari:",
-                    lengthMenu: "Tampilkan _MENU_ data",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                    paginate: {
-                        previous: "Sebelumnya",
-                        next: "Selanjutnya"
-                    }
-                }
-
-            });
-
+        language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            paginate: {
+                previous: "Sebelumnya",
+                next: "Selanjutnya"
+            }
         }
+    });
+}
 
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            $(".datatable").each(function() {
+    $(".datatable").each(function () {
 
-                let tableId = "#" + $(this).attr("id");
+        let tableId = "#" + $(this).attr("id");
 
-                initDataTable(tableId);
+        initDataTable(tableId);
 
-            });
-        });
+    });
+
+});
+
+
     </script>
     @stack('scripts')
     <style>
@@ -411,7 +459,13 @@
             background-color: #eef4ff;
             transition: 0.2s;
         }
+        .filter-select {
+    width: 100px; /* kecilin panjang */
+    border-radius: 8px;
+    padding: 2px 8px;
+}
     </style>
+
 </body>
 
 </html>

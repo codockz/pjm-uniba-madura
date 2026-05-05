@@ -79,9 +79,9 @@
 
                                     <td>
                                         {{-- EDIT --}}
-                                        <button class="btn btn-warning btn-sm px-3" data-bs-toggle="modal"
-                                            data-bs-target="#modalEdit{{ $item->id }}">
-                                            <i class="fas fa-edit"></i>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#modalEdit{{ $item->id }}" title="Edit Data">
+                                            <i class="fas fa-pen"></i>
                                         </button>
 
                                         {{-- DELETE --}}
@@ -90,8 +90,7 @@
                                             @csrf
                                             @method('DELETE')
 
-                                            <button class="btn btn-danger btn-sm px-3"
-                                                onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                            <button type="button" class="btn btn-danger btn-sm delete-confirm">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -135,7 +134,10 @@
                                                 </div>
 
                                                 <div class="modal-footer">
-                                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        Batal
+                                                    </button>
                                                     <button class="btn btn-primary">Update</button>
                                                 </div>
 
@@ -193,7 +195,9 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Batal
+                        </button>
                         <button class="btn btn-primary">Simpan</button>
                     </div>
 

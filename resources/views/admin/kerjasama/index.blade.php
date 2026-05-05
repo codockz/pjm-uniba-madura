@@ -76,14 +76,7 @@
                             </thead>
                             <tbody id="add_new">
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Gambar</th>
-                                    <th>Action</th>
-                                </tr>
-                            </tfoot>
+                            
                         </table>
                     </div>
                 </div>
@@ -189,7 +182,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var newTable = $('#example1').DataTable({
+            newTable = $('#example1').DataTable({
                 columnDefs: [{
                         "targets": '_all', // Apply to all columns
                         "orderable": false
@@ -248,38 +241,47 @@
 
 
 
-        $("#add_form_kerjasama").submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            var url = "{{ route('kerjasama.store') }}";
-            $('#btn_add').prop('disabled', true);
+       $("#add_form_kerjasama").submit(function(e) {
+    e.preventDefault();
 
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: formData,
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status == 400) {
-                        $.each(response.data, function(field, errors) {
-                            $('#' + field).addClass('is-invalid');
-                            $('#' + field + '-error').text(errors[0]).wrapInner(
-                                "<strong />");
-                        });
-                    } else {
-                        toastr.success(response.message);
+    var formData = new FormData(this);
+    var url = "{{ route('kerjasama.store') }}";
 
-                        $('#modal_kerjasama').modal('hide');
-                        $("#add_form_kerjasama")[0].reset(); // Fix here
-                        $('#example1').DataTable().ajax.reload();
-                        $('#ba').attr('src', 'https://pjm.unibamadura.ac.id/logo/logo.png')
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
 
-                    }
-                },
-            });
-        });
+        success: function(response) {
+
+            if (response.status == 400) {
+                $.each(response.data, function(field, errors) {
+                    $('#' + field).addClass('is-invalid');
+                    $('#' + field + '-error').text(errors[0]);
+                });
+            } else {
+
+                toastr.success(response.message);
+
+                // 🔥 FORCE CLOSE MODAL
+                $('#modal_kerjasama').removeClass('show').hide();
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open');
+
+                $("#add_form_kerjasama")[0].reset();
+                $('#ba').attr('src', 'https://pjm.unibamadura.ac.id/logo/logo.png');
+
+                // 🔥 RELOAD TABLE (FIX)
+                setTimeout(function() {
+                    newTable.ajax.reload(null, false);
+                }, 300);
+            }
+        }
+    });
+});
         // modal edit
         $('#example1').on('click', '.edit_inline', function() {
             var rowId = $(this).data('id');
@@ -296,7 +298,7 @@
                     $('#old_gambar').val(response.data.gambar);
                     $('#nama_edit').val(response.data.nama);
                     $('#ba_edit').attr('src', "{{ asset('gambar_kerjasama') }}/" + response.data
-                    .gambar);
+                        .gambar);
 
                     // Show the editModal
                     $('#editModal').modal('show');
@@ -337,52 +339,44 @@
         });
 
 
-        function deleteData(id) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: true
-            });
-            swalWithBootstrapButtons.fire({
-                title: 'Apakah Kamu ingin menghapus data ini ?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.value) {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "{{ route('kerjasama.delete') }}",
-                            type: "POST",
-                            data: {
-                                ids: id,
-                            },
-                            success: function(response) {
-                                toastr.success(response.message);
-                                $('#example1').DataTable().ajax.reload();
 
-                            }
-                        });
-                    }
-                } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swal.fire(
-                        'Cancelled',
-                        'Data is not deleted',
-                        'error'
-                    )
+        function deleteData(id) {
+
+    Swal.fire({
+        title: 'Yakin hapus data?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: "{{ route('kerjasama.delete') }}",
+                type: "POST",
+                data: {
+                    ids: id,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+
+                success: function(response) {
+
+                    toastr.success(response.message);
+
+                    // 🔥 RELOAD TABLE
+                    setTimeout(function() {
+                        newTable.ajax.reload(null, false);
+                    }, 300);
+                },
+
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    toastr.error('Berhasil Hapus Data');
                 }
             });
         }
+    });
+}
     </script>
 @endsection

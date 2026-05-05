@@ -2,85 +2,101 @@
 
 namespace App\Http\Controllers\Admin\layanan\PusatAudit;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LaporanHasilSurvei;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class AdminLaporanHasilSurveiController extends Controller
 {
+    // 🔹 TAMPIL DATA
     public function index()
     {
-        $data = LaporanHasilSurvei::latest()->get();
+        $data = LaporanHasilSurvei::orderBy('tahun', 'desc')->latest()->paginate(5);
 
-        return view('admin.layanan.Admin_pusat_audit.laporan_hasil_survei.index', compact('data'));
+        return view('admin.layanan.admin_pusat_audit.laporan_hasil_survei.index', compact('data'));
     }
 
+    // 🔹 FORM CREATE
+    public function create()
+    {
+        return view('admin.layanan.admin_pusat_audit.laporan_hasil_survei.create');
+    }
+
+    // 🔹 SIMPAN DATA
     public function store(Request $request)
     {
         $request->validate([
             'judul' => 'required',
-            'tahun' => 'required',
-            'gambar' => 'required|image',
-            'file_pdf' => 'required|mimes:pdf',
+            'tahun' => 'nullable|integer',
+            'file' => 'required|mimes:pdf|max:2048',
+            'is_active' => 'required',
         ]);
 
-        $slug = Str::slug($request->judul);
-
-        $gambarName = 'cover-' . $slug . '-' . $request->tahun . '.' . $request->gambar->extension();
-        $pdfName = 'laporan-' . $slug . '-' . $request->tahun . '.' . $request->file_pdf->extension();
-
-        $gambar = $request->file('gambar')->storeAs('laporan/gambar', $gambarName, 'public');
-        $pdf = $request->file('file_pdf')->storeAs('laporan/pdf', $pdfName, 'public');
+        $filePath = $request->file('file')->store('laporan_hasil_survei', 'public');
 
         LaporanHasilSurvei::create([
             'judul' => $request->judul,
             'tahun' => $request->tahun,
-            'gambar' => $gambar,
-            'file_pdf' => $pdf,
+            'file' => $filePath,
+            'is_active' => $request->is_active,
         ]);
 
-        return redirect()->route('laporan_hasil_survei.index')->with('success', 'Data berhasil ditambahkan');
+        return redirect()->route('admin.laporan_hasil_survei.index')->with('success', 'Data berhasil ditambahkan');
     }
 
+    // 🔹 UPDATE DATA
     public function update(Request $request, $id)
     {
         $data = LaporanHasilSurvei::findOrFail($id);
 
-        $data->judul = $request->judul;
-        $data->tahun = $request->tahun;
+        $request->validate([
+            'judul' => 'required',
+            'tahun' => 'nullable|integer',
+            'file' => 'nullable|mimes:pdf|max:2048',
+            'is_active' => 'required',
+        ]);
 
-        if ($request->hasFile('gambar')) {
-            Storage::disk('public')->delete($data->gambar);
+        if ($request->hasFile('file')) {
+            if ($data->file && Storage::disk('public')->exists($data->file)) {
+                Storage::disk('public')->delete($data->file);
+            }
 
-            $gambar = $request->file('gambar')->store('laporan/gambar', 'public');
-
-            $data->gambar = $gambar;
+            $filePath = $request->file('file')->store('laporan_hasil_survei', 'public');
+            $data->file = $filePath;
         }
 
-        if ($request->hasFile('file_pdf')) {
-            Storage::disk('public')->delete($data->file_pdf);
+        $data->update([
+            'judul' => $request->judul,
+            'tahun' => $request->tahun,
+            'is_active' => $request->is_active,
+        ]);
 
-            $pdf = $request->file('file_pdf')->store('laporan/pdf', 'public');
-
-            $data->file_pdf = $pdf;
-        }
-
-        $data->save();
-
-        return redirect()->route('laporan_hasil_survei.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('admin.laporan_hasil_survei.index')->with('success', 'Data berhasil diupdate');
     }
 
+    // 🔹 HAPUS DATA
     public function destroy($id)
     {
         $data = LaporanHasilSurvei::findOrFail($id);
 
-        Storage::disk('public')->delete($data->gambar);
-        Storage::disk('public')->delete($data->file_pdf);
+        if ($data->file && Storage::disk('public')->exists($data->file)) {
+            Storage::disk('public')->delete($data->file);
+        }
 
         $data->delete();
 
-        return redirect()->route('laporan_hasil_survei.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('admin.laporan_hasil_survei.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    // 🔥 TOGGLE STATUS
+    public function toggle($id)
+    {
+        $data = LaporanHasilSurvei::findOrFail($id);
+
+        $data->is_active = !$data->is_active;
+        $data->save();
+
+        return back()->with('success', 'Status berhasil diubah');
     }
 }

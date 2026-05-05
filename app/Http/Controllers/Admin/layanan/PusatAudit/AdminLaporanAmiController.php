@@ -2,85 +2,101 @@
 
 namespace App\Http\Controllers\Admin\layanan\PusatAudit;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LaporanAmi;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class AdminLaporanAmiController extends Controller
 {
+    // 🔹 TAMPIL DATA
     public function index()
     {
-        $data = LaporanAmi::latest()->get();
+        $data = LaporanAmi::orderBy('tahun', 'desc')->latest()->paginate(5);
 
         return view('admin.layanan.admin_pusat_audit.laporan_ami.index', compact('data'));
     }
 
+    // 🔹 FORM CREATE
+    public function create()
+    {
+        return view('admin.layanan.admin_pusat_audit.laporan_ami.create');
+    }
+
+    // 🔹 SIMPAN DATA
     public function store(Request $request)
     {
         $request->validate([
             'judul' => 'required',
-            'tahun' => 'required',
-            'cover' => 'required|image',
-            'file' => 'required|mimes:pdf',
+            'tahun' => 'nullable|integer',
+            'file' => 'required|mimes:pdf|max:2048',
+            'is_active' => 'required',
         ]);
 
-        $slug = Str::slug($request->judul);
-
-        $coverName = 'cover-ami-' . $slug . '-' . $request->tahun . '.' . $request->cover->extension();
-        $pdfName = 'laporan-ami-' . $slug . '-' . $request->tahun . '.' . $request->file->extension();
-
-        $cover = $request->file('cover')->storeAs('laporan_ami/gambar', $coverName, 'public');
-        $pdf = $request->file('file')->storeAs('laporan_ami/pdf', $pdfName, 'public');
+        $filePath = $request->file('file')->store('laporan_ami', 'public');
 
         LaporanAmi::create([
             'judul' => $request->judul,
             'tahun' => $request->tahun,
-            'cover' => $cover,
-            'file' => $pdf,
+            'file' => $filePath,
+            'is_active' => $request->is_active,
         ]);
 
-        return redirect()->route('laporan_ami.index')->with('success', 'Data laporan AMI berhasil ditambahkan');
+        return redirect()->route('admin.laporan_ami.index')->with('success', 'Data berhasil ditambahkan');
     }
 
+    // 🔹 UPDATE DATA
     public function update(Request $request, $id)
     {
         $data = LaporanAmi::findOrFail($id);
 
-        $data->judul = $request->judul;
-        $data->tahun = $request->tahun;
-
-        if ($request->hasFile('cover')) {
-            Storage::disk('public')->delete($data->cover);
-
-            $cover = $request->file('cover')->store('laporan_ami/gambar', 'public');
-
-            $data->cover = $cover;
-        }
+        $request->validate([
+            'judul' => 'required',
+            'tahun' => 'nullable|integer',
+            'file' => 'nullable|mimes:pdf|max:2048',
+            'is_active' => 'required',
+        ]);
 
         if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($data->file);
+            if ($data->file && Storage::disk('public')->exists($data->file)) {
+                Storage::disk('public')->delete($data->file);
+            }
 
-            $pdf = $request->file('file')->store('laporan_ami/pdf', 'public');
-
-            $data->file = $pdf;
+            $filePath = $request->file('file')->store('laporan_ami', 'public');
+            $data->file = $filePath;
         }
 
-        $data->save();
+        $data->update([
+            'judul' => $request->judul,
+            'tahun' => $request->tahun,
+            'is_active' => $request->is_active,
+        ]);
 
-        return redirect()->route('laporan_ami.index')->with('success', 'Data laporan AMI berhasil diupdate');
+        return redirect()->route('admin.laporan_ami.index')->with('success', 'Data berhasil diupdate');
     }
 
+    // 🔹 HAPUS DATA
     public function destroy($id)
     {
         $data = LaporanAmi::findOrFail($id);
 
-        Storage::disk('public')->delete($data->cover);
-        Storage::disk('public')->delete($data->file);
+        if ($data->file && Storage::disk('public')->exists($data->file)) {
+            Storage::disk('public')->delete($data->file);
+        }
 
         $data->delete();
 
-        return redirect()->route('laporan_ami.index')->with('success', 'Data laporan AMI berhasil dihapus');
+        return redirect()->route('admin.laporan_ami.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    // 🔥 TOGGLE STATUS
+    public function toggle($id)
+    {
+        $data = LaporanAmi::findOrFail($id);
+
+        $data->is_active = !$data->is_active;
+        $data->save();
+
+        return back()->with('success', 'Status berhasil diubah');
     }
 }

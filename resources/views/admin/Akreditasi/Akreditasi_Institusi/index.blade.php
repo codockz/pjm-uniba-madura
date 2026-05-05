@@ -62,19 +62,18 @@
                                         </td>
 
                                         <td>
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#modalEdit{{ $item->id }}">
-                                                Edit
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $item->id }}" title="Edit Data">
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
-                                            <form action="{{ route('admin.akreditasi_institusi.destroy', $item->id) }}" method="POST"
-                                                class="d-inline">
+                                            <form action="{{ route('admin.akreditasi_institusi.destroy', $item->id) }}"
+                                                method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                    Hapus
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -96,68 +95,69 @@
     </div>
 
     {{-- ================= MODAL CREATE ================= --}}
-<div class="modal fade" id="modalCreate" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal fade" id="modalCreate" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Akreditasi</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Akreditasi</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form action="{{ route('admin.akreditasi_institusi.store') }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label>Nama PT</label>
+                            <input type="text" name="nama_pt" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Peringkat</label>
+                            <input type="text" name="peringkat" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Nomor SK</label>
+                            <textarea name="nomor_sk" class="form-control" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Tahun SK</label>
+                            <input type="number" name="tahun_sk" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Tanggal Berlaku</label>
+                            <input type="date" name="tgl_berlaku" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Tanggal Kadaluarsa</label>
+                            <input type="date" name="tgl_kadaluarsa" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>File Sertifikat (PDF)</label>
+                            <input type="file" name="file" class="form-control">
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button class="btn btn-primary">Simpan</button>
+                    </div>
+
+                </form>
+
             </div>
-
-            <form action="{{ route('admin.akreditasi_institusi.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        <label>Nama PT</label>
-                        <input type="text" name="nama_pt" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Peringkat</label>
-                        <input type="text" name="peringkat" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Nomor SK</label>
-                        <textarea name="nomor_sk" class="form-control" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Tahun SK</label>
-                        <input type="number" name="tahun_sk" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Tanggal Berlaku</label>
-                        <input type="date" name="tgl_berlaku" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Tanggal Kadaluarsa</label>
-                        <input type="date" name="tgl_kadaluarsa" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>File Sertifikat (PDF)</label>
-                        <input type="file" name="file" class="form-control">
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button class="btn btn-primary">Simpan</button>
-                </div>
-
-            </form>
-
         </div>
     </div>
-</div>
-{{-- -- ================= MODAL EDIT ================= --}}
+    {{-- -- ================= MODAL EDIT ================= --}}
     @foreach ($data as $item)
         <div class="modal fade" id="modalEdit{{ $item->id }}" tabindex="-1">
             <div class="modal-dialog">
@@ -194,8 +194,8 @@
 
                             <div class="mb-3">
                                 <label>Tahun SK</label>
-                                <input type="number" name="tahun_sk" value="{{ $item->tahun_sk }}" class="form-control"
-                                    required>
+                                <input type="number" name="tahun_sk" value="{{ $item->tahun_sk }}"
+                                    class="form-control" required>
                             </div>
 
                             <div class="mb-3">
@@ -221,7 +221,9 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
                             <button class="btn btn-primary">Update</button>
                         </div>
 

@@ -1,32 +1,121 @@
 @extends('frontend_layouts.app')
 
 @section('content')
-
     <div class="container page-content">
 
-        <h3>Laporan Monitoring & Evaluasi</h3>
+        <h3 class="mt-4 mb-4 text-center fw-bold">
+            Laporan Monitoring dan Evaluasi (Monev)
+        </h3>
 
-        @if ($data->count() > 0)
-            @foreach ($data as $item)
-                <h5 class="mt-4">Tahun {{ $item->tahun }}</h5>
+        <div class="filter-wrapper">
 
-                <a href="{{ asset('storage/' . $item->file) }}" target="_blank" class="btn btn-primary btn-sm mb-3">
-                    View Fullscreen
-                </a>
-                <div class="card shadow-sm">
+            <span class="filter-label">
+                <i class="fas fa-filter"></i>
+                Filter
+            </span>
 
-                    <div class="card-body">
+            <select id="filterTahun" class="form-select form-select-sm filter-select">
+                <option value="">Semua</option>
+                @foreach ($listTahun as $thn)
+                    <option value="{{ $thn }}">{{ $thn }}</option>
+                @endforeach
+            </select>
 
-                        <iframe src="{{ asset('storage/' . $item->file) }}" width="100%" height="600px">
+        </div>
 
-                        </iframe>
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <div class="alert alert-info">
-                Belum ada dokumen Laporan Monev
-            </div>
-        @endif
+        {{-- 📋 TABEL --}}
+        <table id="tableLaporanMonev" class="table table-bordered table-striped">
+
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th>Judul Dokumen</th>
+                    <th>Lampiran</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @forelse ($data as $item)
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+
+                        <td>
+                            {{ $item->judul }}
+                            @if ($item->tahun)
+                                ({{ $item->tahun }})
+                            @endif
+                        </td>
+
+                        <td class="text-center">
+                            @if ($item->file)
+                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+   class="text-success text-decoration-none fw-semibold">
+    <i class="fas fa-download me-1"></i> Download
+</a>
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+
+                @empty
+                    <tr>
+                        <td></td>
+                        <td class="text-center">Data tidak ditemukan</td>
+                        <td></td>
+                    </tr>
+                @endforelse
+
+            </tbody>
+
+        </table>
+
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+
+            let table = $('#tableLaporanMonev').DataTable({});
+
+            $('#filterTahun').on('change', function() {
+
+                let tahun = $(this).val();
+
+                loadData({
+                    url: "/laporan-monev?tahun=" + tahun,
+                    table: table,
+                    columns: [
+
+                        // No
+                        (item, index) => index + 1,
+
+                        // Judul
+                        (item) => {
+                            let judul = item.judul;
+                            if (item.tahun) {
+                                judul += ` (${item.tahun})`;
+                            }
+                            return judul;
+                        },
+
+                        // Download
+                        (item) => {
+                            return item.file ?
+    `<a href="/storage/${item.file}" target="_blank"
+        class="download-link">
+        <i class="fas fa-download me-1"></i> Download
+    </a>` :
+    '-';
+                        }
+
+                    ]
+                });
+
+            });
+
+        });
+    </script>
+@endpush

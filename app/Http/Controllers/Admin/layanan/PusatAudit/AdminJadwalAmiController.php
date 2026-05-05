@@ -2,83 +2,101 @@
 
 namespace App\Http\Controllers\Admin\layanan\PusatAudit;
 
-use App\Models\JadwalAmi;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\JadwalAmi;
+use Illuminate\Support\Facades\Storage;
 
 class AdminJadwalAmiController extends Controller
 {
+    // 🔹 TAMPIL DATA
     public function index()
     {
-        $data = JadwalAmi::latest()->get();
+        $data = JadwalAmi::orderBy('tahun', 'desc')->latest()->paginate(5);
 
         return view('admin.layanan.admin_pusat_audit.jadwal_ami.index', compact('data'));
     }
 
+    // 🔹 FORM CREATE
+    public function create()
+    {
+        return view('admin.layanan.admin_pusat_audit.jadwal_ami.create');
+    }
+
+    // 🔹 SIMPAN DATA
     public function store(Request $request)
     {
         $request->validate([
             'judul' => 'required',
-            'tahun' => 'required',
-            'cover' => 'required|image',
-            'file' => 'required|mimes:pdf',
+            'tahun' => 'nullable|integer',
+            'file' => 'required|mimes:pdf|max:2048',
+            'is_active' => 'required',
         ]);
 
-        $slug = Str::slug($request->judul);
-
-        $coverName = 'cover-ami-' . $slug . '-' . $request->tahun . '.' . $request->cover->extension();
-        $pdfName = 'jadwal-ami-' . $slug . '-' . $request->tahun . '.' . $request->file->extension();
-
-        $cover = $request->file('cover')->storeAs('jadwal_ami/gambar', $coverName, 'public');
-        $pdf = $request->file('file')->storeAs('jadwal_ami/pdf', $pdfName, 'public');
+        $filePath = $request->file('file')->store('jadwal_ami', 'public');
 
         JadwalAmi::create([
             'judul' => $request->judul,
             'tahun' => $request->tahun,
-            'cover' => $cover,
-            'file' => $pdf,
+            'file' => $filePath,
+            'is_active' => $request->is_active,
         ]);
 
-        return redirect()->route('jadwal_ami.index')->with('success', 'Data Jadwal AMI berhasil ditambahkan');
+        return redirect()->route('admin.jadwal_ami.index')->with('success', 'Data berhasil ditambahkan');
     }
+
+    // 🔹 UPDATE DATA
     public function update(Request $request, $id)
     {
         $data = JadwalAmi::findOrFail($id);
 
-        $data->judul = $request->judul;
-        $data->tahun = $request->tahun;
-
-        if ($request->hasFile('cover')) {
-            Storage::disk('public')->delete($data->cover);
-
-            $cover = $request->file('cover')->store('jadwal_ami/cover', 'public');
-
-            $data->cover = $cover;
-        }
+        $request->validate([
+            'judul' => 'required',
+            'tahun' => 'nullable|integer',
+            'file' => 'nullable|mimes:pdf|max:2048',
+            'is_active' => 'required',
+        ]);
 
         if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($data->file);
+            if ($data->file && Storage::disk('public')->exists($data->file)) {
+                Storage::disk('public')->delete($data->file);
+            }
 
-            $file = $request->file('file')->store('jadwal_ami/pdf', 'public');
-
-            $data->file = $file;
+            $filePath = $request->file('file')->store('jadwal_ami', 'public');
+            $data->file = $filePath;
         }
 
-        $data->save();
+        $data->update([
+            'judul' => $request->judul,
+            'tahun' => $request->tahun,
+            'is_active' => $request->is_active,
+        ]);
 
-        return redirect()->route('jadwal_ami.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('admin.jadwal_ami.index')->with('success', 'Data berhasil diupdate');
     }
+
+    // 🔹 HAPUS DATA
     public function destroy($id)
     {
         $data = JadwalAmi::findOrFail($id);
 
-        Storage::disk('public')->delete($data->cover);
-        Storage::disk('public')->delete($data->file);
+        if ($data->file && Storage::disk('public')->exists($data->file)) {
+            Storage::disk('public')->delete($data->file);
+        }
 
         $data->delete();
 
-        return redirect()->route('jadwal_ami.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('admin.jadwal_ami.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    // 🔥 TOGGLE STATUS
+    public function toggle($id)
+    {
+        $data = JadwalAmi::findOrFail($id);
+
+        $data->is_active = !$data->is_active;
+        $data->save();
+
+        return back()->with('success', 'Status berhasil diubah');
     }
 }

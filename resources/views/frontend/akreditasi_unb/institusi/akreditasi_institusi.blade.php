@@ -23,36 +23,28 @@
             </thead>
 
             <tbody>
-
-                @forelse ($data as $item)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->nama_pt }}</td>
-                        <td>{{ $item->peringkat }}</td>
-                        <td>{{ $item->nomor_sk }}</td>
-                        <td>{{ $item->tahun_sk }}</td>
-                        <td>{{ $item->tgl_berlaku }}</td>
-                        <td>{{ $item->tgl_kadaluarsa }}</td>
-                        <td>
-                            @if ($item->file)
-                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank">
-                                    Download
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </td>
-                    </tr>
-
-                @empty
-                    <tr>
-                        <td colspan="8" class="text-center">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                @endforelse
-
-            </tbody>
+    @foreach ($data as $item)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $item->nama_pt }}</td>
+            <td>{{ $item->peringkat }}</td>
+            <td>{{ $item->nomor_sk }}</td>
+            <td>{{ $item->tahun_sk }}</td>
+            <td>{{ $item->tgl_berlaku }}</td>
+            <td>{{ $item->tgl_kadaluarsa }}</td>
+            <td>
+                @if ($item->file)
+                    <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                        class="text-success text-decoration-none fw-semibold">
+                        <i class="fas fa-download me-1"></i> Download
+                    </a>
+                @else
+                    -
+                @endif
+            </td>
+        </tr>
+    @endforeach
+</tbody>
 
         </table>
 

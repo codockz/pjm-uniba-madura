@@ -19,43 +19,34 @@
             </thead>
 
             <tbody>
-                @forelse ($data as $item)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
+    @foreach ($data as $item)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
 
-                        <td>{{ $item->pengisi }}</td>
+            <td>{{ $item->pengisi }}</td>
 
-                        {{-- SURVEI KEPUASAN --}}
-                        <td>
-                            @if ($item->link_kepuasan)
-                                <a href="{{ $item->link_kepuasan }}" target="_blank">
-                                    {{ $item->kepuasan_text ?? 'Survei Kepuasan ' . $item->pengisi }}
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </td>
+            <td>
+                @if ($item->link_kepuasan)
+                    <a href="{{ $item->link_kepuasan }}" target="_blank">
+                        {{ $item->kepuasan_text ?? 'Survei Kepuasan ' . $item->pengisi }}
+                    </a>
+                @else
+                    -
+                @endif
+            </td>
 
-                        {{-- SURVEI EVALUASI --}}
-                        <td>
-                            @if ($item->link_evaluasi)
-                                <a href="{{ $item->link_evaluasi }}" target="_blank">
-                                    {{ $item->evaluasi_text ?? 'Survei Evaluasi dan Pemahaman Visi, Misi, Tujuan, dan Strategi' }}
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </td>
-
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="text-center">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
+            <td>
+                @if ($item->link_evaluasi)
+                    <a href="{{ $item->link_evaluasi }}" target="_blank">
+                        {{ $item->evaluasi_text ?? 'Survei Evaluasi dan Pemahaman Visi, Misi, Tujuan, dan Strategi' }}
+                    </a>
+                @else
+                    -
+                @endif
+            </td>
+        </tr>
+    @endforeach
+</tbody>
 
         </table>
 

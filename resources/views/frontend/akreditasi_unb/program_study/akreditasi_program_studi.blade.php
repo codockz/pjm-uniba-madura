@@ -15,12 +15,14 @@
                     <th>SK Izin</th>
                     <th>Akreditasi</th>
                     <th>SK Akreditasi</th>
+                    <th>Berlaku</th>
+                    <th>Kadaluarsa</th>
                     <th>Sertifikat</th>
                 </tr>
             </thead>
 
             <tbody>
-                @forelse ($data as $item)
+                @foreach ($data as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->program_studi }}</td>
@@ -39,6 +41,7 @@
                         <td>
                             <span class="badge badge-success">Unggul</span>
                         </td>
+
                         {{-- SK AKREDITASI --}}
                         <td>
                             @if ($item->sk_akreditasi_text)
@@ -49,24 +52,29 @@
                                 -
                             @endif
                         </td>
+                        {{-- BERLAKU --}}
+                        <td class="text-nowrap">
+                            {{ $item->berlaku ? \Carbon\Carbon::parse($item->berlaku)->format('d-m-Y') : '-' }}
+                        </td>
+
+                        {{-- KADALUARSA --}}
+                        <td class="text-nowrap">
+                            {{ $item->kadaluarsa ? \Carbon\Carbon::parse($item->kadaluarsa)->format('d-m-Y') : '-' }}
+                        </td>
                         {{-- SERTIFIKAT --}}
-                        <td>
+                        <td class="text-nowrap">
                             @if ($item->file)
-                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank">
-                                    Download
+                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                    class="text-success text-decoration-none fw-semibold">
+                                    <i class="fas fa-download me-1"></i> Download
                                 </a>
                             @else
                                 -
                             @endif
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-center">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                @endforelse
+                
+                @endforeach
             </tbody>
         </table>
     </div>

@@ -57,19 +57,18 @@
                                         </td>
 
                                         <td>
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#modalEdit{{ $item->id }}">
-                                                Edit
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $item->id }}" title="Edit Data">
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
-                                            <form action="{{ route('survei_pemangku.destroy', $item->id) }}" method="POST"
-                                                class="d-inline">
+                                            <form action="{{ route('admin.survei_pemangku.destroy', $item->id) }}"
+                                                method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                    Hapus
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -100,7 +99,7 @@
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form action="{{ route('survei_pemangku.store') }}" method="POST">
+                <form action="{{ route('admin.survei_pemangku.store') }}" method="POST">
                     @csrf
 
                     <div class="modal-body">
@@ -154,7 +153,7 @@
                         <button class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <form action="{{ route('survei_pemangku.update', $item->id) }}" method="POST">
+                    <form action="{{ route('admin.survei_pemangku.update', $item->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -193,7 +192,9 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
                             <button class="btn btn-primary">Update</button>
                         </div>
 

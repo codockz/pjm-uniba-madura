@@ -7,8 +7,8 @@
             <ul class="menuLink">
               <li><a href="{{ route('frontend.pengumuman') }}">Pengumuman</a></li>
               <li><a href="{{ route('frontend.berita') }}">Berita</a></li>
-              <li><a href="#">Agenda</a></li>
-              <li><a href="international_students.html">Foto</a></li>
+              <li><a href="{{ route('frontend.agenda') }}">Agenda</a></li>
+              <li><a href="{{ route('frontend.foto') }}">Foto</a></li>
             </ul>
           </div><!-- col-sm-3 col-xs-6 -->
 
@@ -27,9 +27,9 @@
             <div class="socialArea">
               <h5>Find us on:</h5>
               <ul class="list-inline ">
-              <li><a href="{{ $content_footer->facebook }}"><i class="fa fa-facebook"></i></a></li>
-              <li><a href="{{ $content_footer->instagram }}"><i class="fa fa-instagram"></i></a></li>
-              <li><a href="{{ $content_footer->youtube }}"><i class="fa fa-youtube-play"></i></a></li>
+              <li><a href="{{ $content_footer->facebook }}"><i class="fa-brands fa-facebook-f"></i></a></li>
+              <li><a href="{{ $content_footer->instagram }}"><i class="fa-brands fa-instagram" ></i></a></li>
+              <li><a href="{{ $content_footer->youtube }}"><i class="fa-brands fa-youtube"></i></a></li>
               </ul>
             </div><!-- social -->
             <div class="contactNo">

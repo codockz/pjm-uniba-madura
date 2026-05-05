@@ -2,77 +2,101 @@
 
 namespace App\Http\Controllers\Admin\layanan\PusatAudit;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\KalenderMutu;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class AdminKalenderMutuController extends Controller
 {
+    // 🔹 TAMPIL DATA
     public function index()
     {
-        $data = KalenderMutu::latest()->get();
+        $data = KalenderMutu::orderBy('tahun', 'desc')->latest()->paginate(5);
 
-        return view('admin.layanan.Admin_pusat_audit.kalender_mutu.index', compact('data'));
+        return view('admin.layanan.admin_pusat_audit.kalender_mutu.index', compact('data'));
     }
 
-   public function store(Request $request)
-{
-    $request->validate([
-        'judul' => 'required',
-        'tahun' => 'required',
-        'file' => 'required|mimes:pdf',
-    ]);
+    // 🔹 FORM CREATE
+    public function create()
+    {
+        return view('admin.layanan.admin_pusat_audit.kalender_mutu.create');
+    }
 
-    // upload file
-    $pdf = $request->file('file')->store('kalender_mutu/pdf', 'public');
+    // 🔹 SIMPAN DATA
+    public function store(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required',
+            'tahun' => 'nullable|integer',
+            'file' => 'required|mimes:pdf|max:2048',
+            'is_active' => 'required',
+        ]);
 
-    // simpan ke database
-    \App\Models\KalenderMutu::create([
-        'judul' => $request->judul,
-        'tahun' => $request->tahun,
-        'file' => $pdf, // 🔥 INI PENTING
-    ]);
+        $filePath = $request->file('file')->store('kalender_mutu', 'public');
 
-    return redirect()->back()->with('success', 'Data berhasil ditambahkan');
-}
+        KalenderMutu::create([
+            'judul' => $request->judul,
+            'tahun' => $request->tahun,
+            'file' => $filePath,
+            'is_active' => $request->is_active,
+        ]);
 
+        return redirect()->route('admin.kalender_mutu.index')->with('success', 'Data berhasil ditambahkan');
+    }
+
+    // 🔹 UPDATE DATA
     public function update(Request $request, $id)
     {
         $data = KalenderMutu::findOrFail($id);
 
-        $data->judul = $request->judul;
-        $data->tahun = $request->tahun;
+        $request->validate([
+            'judul' => 'required',
+            'tahun' => 'nullable|integer',
+            'file' => 'nullable|mimes:pdf|max:2048',
+            'is_active' => 'required',
+        ]);
 
-        if ($request->hasFile('gambar')) {
-            Storage::disk('public')->delete($data->gambar);
+        if ($request->hasFile('file')) {
+            if ($data->file && Storage::disk('public')->exists($data->file)) {
+                Storage::disk('public')->delete($data->file);
+            }
 
-            $gambar = $request->file('gambar')->store('kalender/gambar', 'public');
-            $data->gambar = $gambar;
+            $filePath = $request->file('file')->store('kalender_mutu', 'public');
+            $data->file = $filePath;
         }
 
-        if ($request->hasFile('file_pdf')) {
-            Storage::disk('public')->delete($data->file_pdf);
+        $data->update([
+            'judul' => $request->judul,
+            'tahun' => $request->tahun,
+            'is_active' => $request->is_active,
+        ]);
 
-            $pdf = $request->file('file_pdf')->store('kalender/pdf', 'public');
-            $data->file_pdf = $pdf;
-        }
-
-        $data->save();
-
-        return redirect()->route('kalender_mutu.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('admin.kalender_mutu.index')->with('success', 'Data berhasil diupdate');
     }
 
+    // 🔹 HAPUS DATA
     public function destroy($id)
     {
         $data = KalenderMutu::findOrFail($id);
 
-        Storage::disk('public')->delete($data->gambar);
-        Storage::disk('public')->delete($data->file_pdf);
+        if ($data->file && Storage::disk('public')->exists($data->file)) {
+            Storage::disk('public')->delete($data->file);
+        }
 
         $data->delete();
 
-        return redirect()->route('kalender_mutu.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('admin.kalender_mutu.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    // 🔥 TOGGLE STATUS
+    public function toggle($id)
+    {
+        $data = KalenderMutu::findOrFail($id);
+
+        $data->is_active = !$data->is_active;
+        $data->save();
+
+        return back()->with('success', 'Status berhasil diubah');
     }
 }

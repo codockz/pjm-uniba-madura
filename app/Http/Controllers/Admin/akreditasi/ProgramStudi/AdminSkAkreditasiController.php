@@ -26,6 +26,8 @@ class AdminSkAkreditasiController extends Controller
             'akreditasi' => 'required',
             'sk_akreditasi' => 'nullable|file|mimes:pdf|max:2048',
             'file' => 'nullable|file|mimes:pdf|max:2048',
+            'berlaku' => 'nullable|date',
+            'kadaluarsa' => 'nullable|date',
         ]);
 
         $skIzinFile = null;
@@ -57,6 +59,8 @@ class AdminSkAkreditasiController extends Controller
             'file_sk_akreditasi' => $skAkreditasiFile,
 
             'file' => $sertifikatFile,
+            'berlaku' => $request->berlaku,
+            'kadaluarsa' => $request->kadaluarsa,
         ]);
 
         return redirect()->route('admin.sk_akreditasi_prodi.index')->with('success', 'Data berhasil ditambahkan');
@@ -73,6 +77,8 @@ class AdminSkAkreditasiController extends Controller
             'akreditasi' => 'required',
             'sk_akreditasi' => 'nullable|file|mimes:pdf|max:2048',
             'file' => 'nullable|file|mimes:pdf|max:2048',
+            'berlaku' => 'nullable|date',
+            'kadaluarsa' => 'nullable|date',
         ]);
 
         // 🔥 UPDATE SK IZIN
@@ -107,6 +113,8 @@ class AdminSkAkreditasiController extends Controller
             'program_studi' => $request->program_studi,
             'jenjang' => $request->jenjang,
             'akreditasi' => $request->akreditasi,
+            'berlaku' => $request->berlaku,
+            'kadaluarsa' => $request->kadaluarsa,
         ]);
 
         return redirect()->route('admin.sk_akreditasi_prodi.index')->with('success', 'Data berhasil diupdate');

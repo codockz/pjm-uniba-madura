@@ -58,24 +58,19 @@
 
                                         <td>
 
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#modalEdit{{ $item->id }}">
-
-                                                Edit
-
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $item->id }}" title="Edit Data">
+                                                <i class="fas fa-pen"></i>
                                             </button>
 
-                                            <form action="{{ route('sertifikasi_dosen.destroy', $item->id) }}" method="POST"
-                                                class="d-inline">
+                                            <form action="{{ route('admin.sertifikasi_dosen.destroy', $item->id) }}"
+                                                method="POST" class="d-inline">
 
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin ingin menghapus data ini?')">
-
-                                                    Hapus
-
+                                                <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
 
                                             </form>
@@ -115,7 +110,7 @@
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form action="{{ route('sertifikasi_dosen.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.sertifikasi_dosen.store') }}" method="POST" enctype="multipart/form-data">
 
                     @csrf
 
@@ -168,7 +163,7 @@
                         <button class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <form action="{{ route('sertifikasi_dosen.update', $item->id) }}" method="POST"
+                    <form action="{{ route('admin.sertifikasi_dosen.update', $item->id) }}" method="POST"
                         enctype="multipart/form-data">
 
                         @csrf

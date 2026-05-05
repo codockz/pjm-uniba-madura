@@ -9,7 +9,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <form action="{{ route('auditor_internal.store') }}" method="POST">
+            <form action="{{ route('admin.auditor_internal.store') }}" method="POST">
                 @csrf
 
                 <div class="row">
@@ -30,7 +30,7 @@
 
                 <div class="d-flex justify-content-end mt-3">
 
-                    <a href="{{ route('auditor_internal.index') }}" class="btn btn-secondary me-2">
+                    <a href="{{ route('admin.auditor_internal.index') }}" class="btn btn-secondary me-2">
                         Batal
                     </a>
 

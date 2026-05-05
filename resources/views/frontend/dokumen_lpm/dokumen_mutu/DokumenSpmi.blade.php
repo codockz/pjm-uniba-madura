@@ -28,7 +28,7 @@
                             </p>
 
                             {{-- DESKRIPSI --}}
-                            <p class="text-muted small" style="line-height: 1.5;">
+                            <p class="text-muted big" style="line-height: 1.5;">
                                 {{ $item->deskripsi }}
                             </p>
 

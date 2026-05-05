@@ -26,6 +26,7 @@ class AdminStatuaOrtakerController extends Controller
     {
         $request->validate([
             'judul' => 'required',
+            'urutan' => 'required|numeric',
             'file' => 'required|mimes:pdf|max:2048'
         ]);
 

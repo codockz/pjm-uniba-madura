@@ -1,37 +1,122 @@
 @extends('frontend_layouts.app')
 
 @section('content')
-    <div class="container" style="margin-top:50px; margin-bottom:50px;">
+<div class="container page-content">
 
-        <!-- JUDUL -->
-        <h4 class="text-center fw-bold mb-4">
-            Rencana Strategis Lembaga
-        </h4>
+    <h3 class="mt-4 mb-4 text-center fw-bold">
+        Rencana Strategis Lembaga
+    </h3>
 
-        @if ($data)
-            <!-- PDF VIEWER ONLY -->
-            <div style="max-width:900px; margin:auto;">
+    {{-- 🔽 FILTER --}}
+    <div class="filter-wrapper">
 
-                <div style="background:#2f2f2f; padding:10px; border-radius:8px;">
-                    <iframe src="{{ asset('storage/' . $data->file) }}" width="100%" height="750px"
-                        style="border:none; border-radius:6px;">
-                    </iframe>
-                </div>
+        <span class="filter-label">
+            <i class="fas fa-filter"></i>
+            Filter
+        </span>
 
-
-                <div class="mt-2 text-start">
-                    <a href="{{ asset('storage/' . $data->file) }}" download
-                        style="font-size:13px; text-decoration:none; color:#888;">
-                        Unduh
-                    </a>
-                </div>
-
-            </div>
-        @else
-            <div class="alert alert-warning text-center">
-                Data belum tersedia
-            </div>
-        @endif
+        <select id="filterTahun" class="form-select form-select-sm filter-select">
+            <option value="">Semua</option>
+            @foreach ($listTahun as $thn)
+                <option value="{{ $thn }}">{{ $thn }}</option>
+            @endforeach
+        </select>
 
     </div>
+
+    {{-- 📋 TABEL --}}
+    <table id="tableRenstraLembaga" class="table table-bordered table-striped">
+
+        <thead>
+            <tr>
+                <th width="5%">No</th>
+                <th>Judul Dokumen</th>
+                <th>Lampiran</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @forelse ($data as $item)
+                <tr>
+                    <td class="text-center">{{ $loop->iteration }}</td>
+
+                    {{-- JUDUL + TAHUN --}}
+                    <td>
+                        {{ $item->judul }}
+                        @if ($item->tahun)
+                            ({{ $item->tahun }})
+                        @endif
+                    </td>
+
+                    {{-- DOWNLOAD --}}
+                    <td class="text-center">
+                        @if ($item->file)
+                           <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                    class="text-success text-decoration-none fw-semibold">
+                                    <i class="fas fa-download me-1"></i> Download
+                                </a>
+                        @else
+                            -
+                        @endif
+                    </td>
+                </tr>
+
+            @empty
+                <tr>
+                    <td></td>
+                    <td class="text-center">Data tidak ditemukan</td>
+                    <td></td>
+                </tr>
+            @endforelse
+
+        </tbody>
+
+    </table>
+
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+
+        let table = $('#tableRenstraLembaga').DataTable({});
+
+        $('#filterTahun').on('change', function() {
+
+            let tahun = $(this).val();
+
+            loadData({
+                url: "/rencana-strategis-lembaga?tahun=" + tahun,
+                table: table,
+                columns: [
+
+                    // No
+                    (item, index) => index + 1,
+
+                    // Judul
+                    (item) => {
+                        let judul = item.judul;
+                        if (item.tahun) {
+                            judul += ` (${item.tahun})`;
+                        }
+                        return judul;
+                    },
+
+                    // Download
+                    (item) => {
+                        return item.file ?
+    `<a href="/storage/${item.file}" target="_blank"
+        class="download-link">
+        <i class="fas fa-download me-1"></i> Download
+    </a>` :
+    '-';
+                    }
+                ]
+            });
+        });
+
+    });
+</script>
+@endpush

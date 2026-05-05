@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class StatuaOrtaker extends Model
 {
     use HasFactory;
-    protected $fillable = ['judul', 'file', 'tahun'];
+    protected $fillable = ['judul', 'file', 'urutan', 'tahun'];
 }

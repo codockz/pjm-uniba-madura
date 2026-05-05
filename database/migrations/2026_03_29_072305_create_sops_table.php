@@ -15,12 +15,10 @@ class CreateSopsTable extends Migration
     {
         Schema::create('sops', function (Blueprint $table) {
         $table->id();
-
         $table->string('judul');        // Judul SOP
         $table->string('file');         // File PDF
         $table->text('deskripsi')->nullable(); // Opsional
         $table->string('tahun')->nullable();   // 🔥 tambahan biar konsisten dengan yang lain
-
         $table->timestamps();
     });
     }

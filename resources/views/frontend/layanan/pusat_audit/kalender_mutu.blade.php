@@ -1,41 +1,121 @@
 @extends('frontend_layouts.app')
 
 @section('content')
-    <div class="container py-5">
+    <div class="container page-content">
 
-        <div style="margin-top:40px; margin-bottom:40px;">
-            <h3 class="text-center mb-4">
-                Kalender Mutu Tahun {{ $tahun }}
-            </h3>
+        <h3 class="mt-4 mb-4 text-center fw-bold">
+            Kalender Mutu
+        </h3>
+
+        <div class="filter-wrapper">
+
+            <span class="filter-label">
+                <i class="fas fa-filter"></i>
+                Filter
+            </span>
+
+            <select id="filterTahun" class="form-select form-select-sm filter-select">
+                <option value="">Semua</option>
+                @foreach ($listTahun as $thn)
+                    <option value="{{ $thn }}">{{ $thn }}</option>
+                @endforeach
+            </select>
+
         </div>
 
-        <div class="row">
-            @forelse ($data as $item)
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card shadow-sm border-0 text-center">
+        {{-- 📋 TABEL --}}
+        <table id="tableKalenderFrontend" class="table table-bordered table-striped">
 
-                        <!-- COVER -->
-                        <img src="{{ asset('storage/' . $item->gambar) }}"
-                             style="width:100%; object-fit:contain; background:white;"
-                             alt="cover">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th>Judul Kalender</th>
+                    <th>Lampiran</th>
+                </tr>
+            </thead>
 
-                        <!-- BUTTON -->
-                        <div style="padding:10px;">
-                            <a href="{{ asset('storage/' . $item->file_pdf) }}"
-                               target="_blank"
-                               class="btn btn-success btn-sm">
-                                Lihat PDF
-                            </a>
-                        </div>
+            <tbody>
 
-                    </div>
-                </div>
-            @empty
-                <div class="col-12 text-center">
-                    <p>Data kalender mutu tahun {{ $tahun }} belum tersedia</p>
-                </div>
-            @endforelse
-        </div>
+                @forelse ($data as $item)
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+
+                        <td>
+                            {{ $item->judul }}
+                            @if ($item->tahun)
+                                ({{ $item->tahun }})
+                            @endif
+                        </td>
+
+                        <td class="text-center">
+                            @if ($item->file)
+                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                    class="text-success text-decoration-none fw-semibold">
+                                    <i class="fas fa-download me-1"></i> Download
+                                </a>
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+
+                @empty
+                    <tr>
+                        <td></td>
+                        <td class="text-center">Data tidak ditemukan</td>
+                        <td></td>
+                    </tr>
+                @endforelse
+
+            </tbody>
+
+        </table>
 
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+
+            let table = $('#tableKalenderFrontend').DataTable({});
+
+            $('#filterTahun').on('change', function() {
+
+                let tahun = $(this).val();
+
+                loadData({
+                    url: "/kalender-mutu?tahun=" + tahun,
+                    table: table,
+                    columns: [
+
+                        // No
+                        (item, index) => index + 1,
+
+                        // Judul
+                        (item) => {
+                            let judul = item.judul;
+                            if (item.tahun) {
+                                judul += ` (${item.tahun})`;
+                            }
+                            return judul;
+                        },
+
+                        // Download
+                        (item) => {
+                            return item.file ?
+    `<a href="/storage/${item.file}" target="_blank"
+        class="download-link">
+        <i class="fas fa-download me-1"></i> Download
+    </a>` :
+    '-';
+                        }
+
+                    ]
+                });
+
+            });
+
+        });
+    </script>
+@endpush

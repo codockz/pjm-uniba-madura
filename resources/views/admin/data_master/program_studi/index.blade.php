@@ -27,7 +27,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama }}</td>
-                                <td  class="text-center">
+                                <td class="text-center">
                                     <a href="{{ route('admin.program-studi.edit', $item->id) }}"
                                         class="badge bg-warning text-dark text-decoration-none px-3 py-2 me-1">
                                         <i class="fas fa-edit fa-lg"></i>
@@ -37,8 +37,8 @@
                                         @csrf
                                         @method('DELETE')
 
-                                        <button class="badge bg-danger border-0 px-3 py-2">
-                                            <i class="fas fa-trash fa-lg"></i>
+                                        <button type="button" class="btn btn-danger btn-sm delete-confirm">
+                                            <i class="fas fa-trash"></i>
                                         </button>
 
                                     </form>
